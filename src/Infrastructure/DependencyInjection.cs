@@ -22,7 +22,10 @@ public static class DependencyInjection
 
         services.AddDbContext<DatabaseContext>(options =>
         {
-            options.UseNpgsql(connectionString);
+            options.UseNpgsql(connectionString, builder =>
+            {
+                builder.UseQuerySplittingBehavior(QuerySplittingBehavior.SplitQuery);
+            });
         });
 
         return services;

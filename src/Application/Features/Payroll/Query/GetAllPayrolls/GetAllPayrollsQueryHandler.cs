@@ -10,7 +10,7 @@ public sealed class GetAllPayrollsQueryHandler(IUnitOfWork unitOfWork, IMapper m
     {
         var totalPayrolls = await unitOfWork.Payrolls.CountAsync(cancellationToken);
         var totalPages = (int)Math.Ceiling((double)totalPayrolls / request.Request.PageSize);
-        var payrolls = await unitOfWork.Payrolls.GetAllAsync(cancellationToken: cancellationToken);
+        var payrolls = await unitOfWork.Payrolls.GetAllAsync(request.Request.PageIndex, request.Request.PageSize, cancellationToken);
         var mappedPayrolls = mapper.Map<List<PayrollResponse>>(payrolls);
         return new GetAllPayrollsQueryResult(
             new PaginationResponse<PayrollResponse>(

@@ -15,6 +15,7 @@ public class BaseRepository<TEntity>(DatabaseContext context)
     {
         return await context.Set<TEntity>()
             .AsNoTracking()
+            .OrderBy(x => x.CreatedAt)
             .Skip((pageIndex - 1) * pageSize)
             .Take(pageSize)
             .ToListAsync(cancellationToken: cancellationToken);

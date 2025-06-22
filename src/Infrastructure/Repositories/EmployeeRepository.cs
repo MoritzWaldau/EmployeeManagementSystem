@@ -9,6 +9,7 @@ public sealed class EmployeeRepository(DatabaseContext context) :
     {
         return await _context.Employees.Include(x => x.Payrolls)
             .AsNoTracking()
+            .OrderBy(x => x.CreatedAt)
             .Skip((pageIndex - 1) * pageSize)
             .Take(pageSize)
             .ToListAsync(cancellationToken: cancellationToken);
