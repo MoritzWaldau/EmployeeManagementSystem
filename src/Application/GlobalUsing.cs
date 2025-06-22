@@ -1,0 +1,13 @@
+﻿global using AutoMapper;
+global using Domain.Entities;
+global using Application.Abstraction;
+global using Domain.CQRS;
+global using System.Reflection;
+global using Application.Behaviors;
+global using Microsoft.Extensions.DependencyInjection;
+global using MediatR;
+global using System.Text.Json.Serialization;
+global using Application.Models.Employee;
+global using Application.Behaviors.Validation;
+global using FluentValidation;
+global using Application.Models.Payroll;

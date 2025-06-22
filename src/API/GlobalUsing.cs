@@ -1,0 +1,9 @@
+﻿global using API;
+global using Application;
+global using Infrastructure;
+global using Application.Features.Employee.Command.CreateEmployee;
+global using Application.Features.Employee.Query.GetAllEmployees;
+global using Application.Features.Employee.Query.GetEmployeeById;
+global using Application.Models.Employee;
+global using Carter;
+global using MediatR;
