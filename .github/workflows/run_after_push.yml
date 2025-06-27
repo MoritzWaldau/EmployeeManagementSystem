@@ -21,3 +21,14 @@ jobs:
 
       - name: Build with dotnet
         run: dotnet build --configuration Release
+        
+  tests:
+    runs-on: windows-latest
+    needs: build
+    permissions:
+      contents: read
+    
+    steps:
+      - name: Run tests
+        run: dotnet test --configuration Release
+  
