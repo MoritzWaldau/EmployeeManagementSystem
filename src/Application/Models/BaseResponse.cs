@@ -1,6 +1,5 @@
 ﻿namespace Application.Models;
 
-
 public abstract record BaseResponse
 {
     [JsonPropertyOrder(-4)]

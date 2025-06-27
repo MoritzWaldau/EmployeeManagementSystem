@@ -1,16 +1,4 @@
-﻿using System.Text.Json.Serialization;
-using API.Middleware;
-using Carter;
-using Infrastructure.Database;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.OpenApi.Models;
-using OpenTelemetry;
-using OpenTelemetry.Logs;
-using OpenTelemetry.Resources;
-using OpenTelemetry.Trace;
-using Serilog;
-
-namespace API;
+﻿namespace API;
 
 public static class DependencyInjection
 {

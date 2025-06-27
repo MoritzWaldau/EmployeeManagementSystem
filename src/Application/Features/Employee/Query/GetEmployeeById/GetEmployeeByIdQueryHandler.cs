@@ -1,12 +1,18 @@
 ﻿namespace Application.Features.Employee.Query.GetEmployeeById;
 
 public class GetEmployeeByIdQueryHandler(IUnitOfWork unitOfWork, IMapper mapper) 
-    : IQueryHandler<GetEmployeeByIdQuery, GetEmployeeByIdQueryResult>
+    : IQueryHandler<GetEmployeeByIdQuery, Result<EmployeeResponse>>
 {
-    public async Task<GetEmployeeByIdQueryResult> Handle(GetEmployeeByIdQuery request, CancellationToken cancellationToken)
+    public async Task<Result<EmployeeResponse>> Handle(GetEmployeeByIdQuery request, CancellationToken cancellationToken)
     {
-        var employee = await unitOfWork.Employees.GetByIdAsync(request.Id, cancellationToken);
+        var result = await unitOfWork.Employees.GetByIdAsync(request.Id, cancellationToken);
+        if (!result.IsSuccess)
+        {
+            return Result<EmployeeResponse>.Failure(result.ErrorMessage);
+        }
+
+        var employee = result.Value!;
         var mappedEmployee = mapper.Map<EmployeeResponse>(employee);
-        return new GetEmployeeByIdQueryResult(mappedEmployee);
+        return Result<EmployeeResponse>.Success(mappedEmployee);
     }
 }

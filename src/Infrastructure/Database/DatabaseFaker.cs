@@ -1,8 +1,4 @@
-﻿using Bogus;
-using Domain.Enums;
-using Microsoft.Extensions.Configuration;
-
-namespace Infrastructure.Database;
+﻿namespace Infrastructure.Database;
 
 public class DatabaseFaker 
 {

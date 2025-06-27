@@ -1,10 +1,4 @@
-﻿using Domain.Exceptions;
-using FluentValidation;
-using Microsoft.AspNetCore.Diagnostics;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-
-namespace API.Middleware;
+﻿namespace API.Middleware;
 
 public class ExceptionMiddleware(ILogger<ExceptionMiddleware> logger) : IExceptionHandler
 {
@@ -19,12 +13,6 @@ public class ExceptionMiddleware(ILogger<ExceptionMiddleware> logger) : IExcepti
                 ex.Message,
                 exception.GetType().Name,
                 context.Response.StatusCode = StatusCodes.Status400BadRequest
-            ),
-            NotFoundException ex =>
-            (
-                ex.Message,
-                exception.GetType().Name,
-                context.Response.StatusCode = StatusCodes.Status404NotFound
             ),
             DbUpdateException ex =>
             (

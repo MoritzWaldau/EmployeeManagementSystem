@@ -1,6 +1,4 @@
-﻿using Domain.Enums;
-
-namespace Application.Models.Payroll;
+﻿namespace Application.Models.Payroll;
 
 public sealed record PayrollRequest
 {

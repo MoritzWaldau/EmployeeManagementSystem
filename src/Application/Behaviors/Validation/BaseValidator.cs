@@ -1,6 +1,4 @@
-﻿using FluentValidation;
-
-namespace Application.Behaviors.Validation;
+﻿namespace Application.Behaviors.Validation;
 
 public abstract class BaseValidator<T>(IServiceProvider provider) : AbstractValidator<T>
 {

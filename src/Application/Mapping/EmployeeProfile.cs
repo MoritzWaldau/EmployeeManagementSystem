@@ -1,6 +1,4 @@
-﻿using Application.Models.Employee;
-
-namespace Application.Mapping;
+﻿namespace Application.Mapping;
 
 public class EmployeeProfile : Profile
 {

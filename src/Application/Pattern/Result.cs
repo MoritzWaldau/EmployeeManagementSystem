@@ -1,0 +1,61 @@
+﻿namespace Application.Pattern;
+
+public class Result
+{
+    public bool IsSuccess { get; protected init; }
+    public string ErrorMessage { get; protected init; } = string.Empty;
+    
+    public static Result Failure(string errorMessage)
+    {
+        return new Result
+        {
+            IsSuccess = false,
+            ErrorMessage = errorMessage
+        };
+    }
+
+    public static Result Success()
+    {
+        return new Result
+        {
+            IsSuccess = true
+        };
+    }
+    
+    public TR Match<TR>(Func<TR> onSuccess, Func<string, TR> onFailure)
+    {
+        return IsSuccess ? onSuccess() : onFailure(ErrorMessage);
+    }
+}
+
+public class Result<T> : Result
+{
+    public T? Value { get; private init;}
+    
+    public static Result<T> Success(T value)
+    {
+        return new Result<T>
+        {
+            IsSuccess = true,
+            Value = value,
+        };
+    }
+    
+    public new static Result<T> Failure(string errorMessage)
+    {
+        return new Result<T>
+        {
+            IsSuccess = false,
+            ErrorMessage = errorMessage,
+        };
+    }
+    
+    public TR Match<TR>(Func<T, TR> onSuccess, Func<Result<T>, TR> onFailure)
+    {
+        return IsSuccess ? onSuccess(Value!) : onFailure(this);
+    }
+}
+
+
+
+    

@@ -1,7 +1,4 @@
-﻿using Application.Behaviors.Validation;
-using FluentValidation;
-
-namespace Application.Features.Employee.Command.CreateEmployee;
+﻿namespace Application.Features.Employee.Command.CreateEmployee;
 
 public sealed class CreateEmployeeCommandValidator : BaseValidator<CreateEmployeeCommand>
 {

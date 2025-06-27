@@ -1,10 +1,4 @@
-﻿using Application.Features.Payroll.Command.CreatePayroll;
-using Application.Features.Payroll.Command.DeletePayroll;
-using Application.Features.Payroll.Command.UpdatePayroll;
-using Application.Features.Payroll.Query.GetAllPayrolls;
-using Application.Features.Payroll.Query.GetPayrollById;
-using Application.Models.Pagination;
-using Application.Models.Payroll;
+﻿using API.Extensions;
 
 namespace API.Endpoints;
 
@@ -17,24 +11,28 @@ public sealed class PayrollEndpoint : ICarterModule
         group.MapGet("/", GetAllPayrolls)
             .WithSummary("Get All Payrolls")
             .WithName(nameof(GetAllPayrolls))
-            .Produces<PaginationResponse<PayrollResponse>>();
+            .Produces<PaginationResponse<PayrollResponse>>()
+            .Produces(StatusCodes.Status400BadRequest);
         
-        group.MapGet("/{id}", GetPayrollById)
+        group.MapGet("/{id:guid}", GetPayrollById)
             .WithSummary("Get Payroll By Id")
             .WithName(nameof(GetPayrollById))
-            .Produces<PayrollResponse>();
+            .Produces<PayrollResponse>()
+            .Produces(StatusCodes.Status400BadRequest);
         
         group.MapPost("/", CreatePayroll)
             .WithSummary("Create Payroll")
             .WithName(nameof(CreatePayroll))
             .Accepts<PayrollRequest>("application/json")
-            .Produces<PayrollResponse>(StatusCodes.Status201Created);
+            .Produces<PayrollResponse>(StatusCodes.Status201Created)
+            .Produces(StatusCodes.Status400BadRequest);
         
         group.MapPut("/{id}", UpdatePayroll)
             .WithSummary("Update Payroll")
             .WithName(nameof(UpdatePayroll))
             .Accepts<PayrollRequest>("application/json")
-            .Produces<PayrollResponse>();
+            .Produces<PayrollResponse>()
+            .Produces(StatusCodes.Status400BadRequest);
         
         group.MapDelete("/{id}", DeletePayroll)
             .WithSummary("Delete Payroll")
@@ -45,25 +43,30 @@ public sealed class PayrollEndpoint : ICarterModule
     private static async Task<IResult> GetAllPayrolls([AsParameters] PaginationRequest request, ISender sender)
     {
         var result = await sender.Send(new GetAllPayrollsQuery(request));
-        return Results.Ok(result.Response);
+        return result.Match(Results.Ok, err => Results.BadRequest(err.ToProblemDetails("api/payroll", "Failed to get all payrolls")));
+
     }
     
     private static async Task<IResult> GetPayrollById(Guid id, ISender sender)
     {
         var result = await sender.Send(new GetPayrollByIdQuery(id));
-        return Results.Ok(result.Response);
+        return result.Match(Results.Ok, err => Results.BadRequest(err.ToProblemDetails($"api/payroll/{id}", "Failed to get payroll by id")));
+
     }
     
     private static async Task<IResult> CreatePayroll(PayrollRequest request, ISender sender)
     {
         var result = await sender.Send(new CreatePayrollCommand(request));
-        return Results.Created($"/api/payroll/{result.Response.Id}", result.Response);
+        return result.Match(x => Results.Created(
+                $"/api/payroll/{result.Value!.Id}", result.Value!), 
+            err => Results.BadRequest(err.ToProblemDetails($"/api/payroll/{result.Value!.Id}", "Failed to create payroll"))
+        );
     }
     
     private static async Task<IResult> UpdatePayroll(Guid id, PayrollRequest request, ISender sender)
     {
         var result = await sender.Send(new UpdatePayrollCommand(id, request));
-        return Results.Ok(result.Response);
+        return result.Match(Results.Ok, Results.BadRequest);
     }
     
     private static async Task<IResult> DeletePayroll(Guid id, ISender sender)

@@ -1,8 +1,4 @@
-﻿using System.Diagnostics;
-using MediatR;
-using Microsoft.Extensions.Logging;
-
-namespace Application.Behaviors;
+﻿namespace Application.Behaviors;
 
 public sealed class RequestLoggingPipelineBehavior<TRequest, TResponse>
     (ILogger<RequestLoggingPipelineBehavior<TRequest, TResponse>> logger)
@@ -12,8 +8,10 @@ public sealed class RequestLoggingPipelineBehavior<TRequest, TResponse>
 {
     public async Task<TResponse> Handle(TRequest request, RequestHandlerDelegate<TResponse> next, CancellationToken cancellationToken)
     {
-        logger.LogInformation("[START] Handle request={Request} - Response={Response}",
-            typeof(TRequest).Name, typeof(TResponse).Name);
+        //Optional request logging
+        /*logger.LogInformation("[START] Handle request={Request}",
+            typeof(TRequest).Name);
+            */
 
         var timer = new Stopwatch();
         timer.Start();
@@ -26,8 +24,10 @@ public sealed class RequestLoggingPipelineBehavior<TRequest, TResponse>
             logger.LogWarning("[PERFORMANCE] The request {Request} took {TimeTaken}",
                 typeof(TRequest).Name, timeTaken.Seconds);
         
-        logger.LogInformation("[END] Handled {Request} with {Response}",
-            typeof(TRequest).Name, typeof(TResponse).Name);
+        //Optional request logging
+        /*logger.LogInformation("[END] Handled {Request}",
+            typeof(TRequest).Name);
+            */
 
         return response;
     }

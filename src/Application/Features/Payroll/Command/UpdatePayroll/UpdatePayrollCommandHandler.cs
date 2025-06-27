@@ -1,11 +1,18 @@
 ﻿namespace Application.Features.Payroll.Command.UpdatePayroll;
 
 public class UpdatePayrollCommandHandler(IUnitOfWork unitOfWork, IMapper mapper) 
-    : ICommandHandler<UpdatePayrollCommand, UpdatePayrollCommandResponse>
+    : ICommandHandler<UpdatePayrollCommand, Result<PayrollResponse>>
 {
-    public async Task<UpdatePayrollCommandResponse> Handle(UpdatePayrollCommand request, CancellationToken cancellationToken)
+    public async Task<Result<PayrollResponse>> Handle(UpdatePayrollCommand request, CancellationToken cancellationToken)
     {
-        var entity = await unitOfWork.Payrolls.GetByIdAsync(request.Id, cancellationToken);
+        var result = await unitOfWork.Payrolls.GetByIdAsync(request.Id, cancellationToken);
+        
+        if (!result.IsSuccess)
+        {
+            return Result<PayrollResponse>.Failure("");
+        }
+        
+        var entity = result.Value!;
         
         entity.EmployeeId = request.Request.EmployeeId ?? entity.EmployeeId;
         entity.Year = request.Request.Year ?? entity.Year;
@@ -15,6 +22,6 @@ public class UpdatePayrollCommandHandler(IUnitOfWork unitOfWork, IMapper mapper)
         
         await unitOfWork.Payrolls.UpdateAsync(entity, cancellationToken);
         var mappedResponse = mapper.Map<PayrollResponse>(entity);
-        return new UpdatePayrollCommandResponse(mappedResponse);
+        return Result<PayrollResponse>.Success(mappedResponse);
     }
 }

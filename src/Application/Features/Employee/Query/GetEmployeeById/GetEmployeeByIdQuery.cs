@@ -1,7 +1,3 @@
-﻿using Application.Models.Employee;
+﻿namespace Application.Features.Employee.Query.GetEmployeeById;
 
-namespace Application.Features.Employee.Query.GetEmployeeById;
-
-public sealed record GetEmployeeByIdQuery(Guid Id) : IQuery<GetEmployeeByIdQueryResult>;
-
-public sealed record GetEmployeeByIdQueryResult(EmployeeResponse Response);
+public sealed record GetEmployeeByIdQuery(Guid Id) : IQuery<Result<EmployeeResponse>>;

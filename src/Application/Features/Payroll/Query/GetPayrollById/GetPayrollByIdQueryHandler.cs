@@ -1,12 +1,17 @@
 ﻿namespace Application.Features.Payroll.Query.GetPayrollById;
 
 public sealed class GetPayrollByIdQueryHandler(IUnitOfWork unitOfWork, IMapper mapper) 
-    : IQueryHandler<GetPayrollByIdQuery, GetPayrollByIdResponse>
+    : IQueryHandler<GetPayrollByIdQuery, Result<PayrollResponse>>
 {
-    public async Task<GetPayrollByIdResponse> Handle(GetPayrollByIdQuery request, CancellationToken cancellationToken)
+    public async Task<Result<PayrollResponse>> Handle(GetPayrollByIdQuery request, CancellationToken cancellationToken)
     {
-        var payroll = await unitOfWork.Payrolls.GetByIdAsync(request.Id, cancellationToken);
+        var result = await unitOfWork.Payrolls.GetByIdAsync(request.Id, cancellationToken);
+        if (!result.IsSuccess)
+        {
+            return Result<PayrollResponse>.Failure(result.ErrorMessage);
+        }
+        var payroll = result.Value!;
         var mappedPayroll = mapper.Map<PayrollResponse>(payroll);
-        return new GetPayrollByIdResponse(mappedPayroll);
+        return Result<PayrollResponse>.Success(mappedPayroll);
     }
 }

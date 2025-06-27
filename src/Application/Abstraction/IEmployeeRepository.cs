@@ -1,6 +1,4 @@
-﻿using Domain.Abstraction;
-
-namespace Application.Abstraction;
+﻿namespace Application.Abstraction;
 
 public interface IEmployeeRepository<TEntity> 
     : IBaseRepository<TEntity> where TEntity : Entity

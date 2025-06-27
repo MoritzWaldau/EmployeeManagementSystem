@@ -1,15 +1,17 @@
-﻿using Application.Models.Payroll;
-
-namespace Application.Features.Payroll.Command.CreatePayroll;
+﻿namespace Application.Features.Payroll.Command.CreatePayroll;
 
 public sealed class CreatePayrollCommandHandler(IUnitOfWork unitOfWork, IMapper mapper) 
-    : ICommandHandler<CreatePayrollCommand, CreatePayrollResponse>
+    : ICommandHandler<CreatePayrollCommand, Result<PayrollResponse>>
 {
-    public async Task<CreatePayrollResponse> Handle(CreatePayrollCommand request, CancellationToken cancellationToken)
+    public async Task<Result<PayrollResponse>> Handle(CreatePayrollCommand request, CancellationToken cancellationToken)
     {
         var entity = mapper.Map<Domain.Entities.Payroll>(request.PayrollRequest);
-        await unitOfWork.Payrolls.CreateAsync(entity, cancellationToken);
+        var result = await unitOfWork.Payrolls.CreateAsync(entity, cancellationToken);
+        if (!result.IsSuccess)
+        {
+            return Result<PayrollResponse>.Failure(result.ErrorMessage);
+        }
         var mappedPayroll = mapper.Map<PayrollResponse>(entity);
-        return new CreatePayrollResponse(mappedPayroll);
+        return Result<PayrollResponse>.Success(mappedPayroll);
     }
 }

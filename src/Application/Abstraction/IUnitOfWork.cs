@@ -1,6 +1,4 @@
-﻿using Domain.Entities;
-
-namespace Application.Abstraction;
+﻿namespace Application.Abstraction;
 
 public interface IUnitOfWork
 {

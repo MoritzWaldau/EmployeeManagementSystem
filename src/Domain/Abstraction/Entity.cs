@@ -1,6 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations;
-
-namespace Domain.Abstraction;
+﻿namespace Domain.Abstraction;
 
 public abstract class Entity : IEntity
 {

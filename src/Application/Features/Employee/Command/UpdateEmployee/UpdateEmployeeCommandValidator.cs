@@ -1,7 +1,4 @@
-﻿using Application.Behaviors.Validation;
-using FluentValidation;
-
-namespace Application.Features.Employee.Command.UpdateEmployee;
+﻿namespace Application.Features.Employee.Command.UpdateEmployee;
 
 public class UpdateEmployeeCommandValidator : BaseValidator<UpdateEmployeeCommand>
 {

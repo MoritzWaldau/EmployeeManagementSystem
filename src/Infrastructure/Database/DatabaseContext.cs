@@ -1,7 +1,4 @@
-﻿using Domain.Abstraction;
-using Domain.Entities;
-
-namespace Infrastructure.Database;
+﻿namespace Infrastructure.Database;
 
 public class DatabaseContext(DbContextOptions<DatabaseContext> options) 
     : DbContext(options)
