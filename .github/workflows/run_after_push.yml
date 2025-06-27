@@ -5,8 +5,6 @@ on:
   push:
     branches: ["master"]
     
-    
-
 jobs:
   build:
     runs-on: windows-latest
@@ -14,12 +12,12 @@ jobs:
       contents: read
 
     steps:
-      uses: actions/checkout@v4
+      - uses: actions/checkout@v4
 
-    - name: Set up .NET Core
-      uses: actions/setup-dotnet@v4
-      with:
-        dotnet-version: '9.x'
+      - name: Set up .NET Core
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '9.x'
 
-    - name: Build with dotnet
+      - name: Build with dotnet
         run: dotnet build --configuration Release
