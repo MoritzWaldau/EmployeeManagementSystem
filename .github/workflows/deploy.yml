@@ -10,8 +10,9 @@ on:
 # Set up permissions for deploying with secretless Azure federated credentials
 # https://learn.microsoft.com/en-us/azure/developer/github/connect-from-azure?tabs=azure-portal%2Clinux#set-up-azure-login-with-openid-connect-authentication
 permissions:
-  id-token: write
   contents: read
+  pages: write
+  id-token: write
 
 
 jobs:
@@ -23,6 +24,7 @@ jobs:
       AZURE_SUBSCRIPTION_ID: ${{ vars.AZURE_SUBSCRIPTION_ID }}
       AZURE_ENV_NAME: ${{ vars.AZURE_ENV_NAME }}
       AZURE_LOCATION: ${{ vars.AZURE_LOCATION }}
+      
     steps:
       - name: Checkout
         uses: actions/checkout@v4
