@@ -41,6 +41,14 @@ public class Result<T> : Result
         };
     }
     
+    public new static Result<T> Success()
+    {
+        return new Result<T>
+        {
+            IsSuccess = true,
+        };
+    }
+    
     public new static Result<T> Failure(string errorMessage)
     {
         return new Result<T>

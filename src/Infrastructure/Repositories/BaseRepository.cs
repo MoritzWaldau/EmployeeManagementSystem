@@ -56,10 +56,17 @@ public class BaseRepository<TEntity>(DatabaseContext context)
         await context.SaveChangesAsync(cancellationToken);
     }
 
-    public async Task DeleteAsync(Guid id, CancellationToken cancellationToken = default)
+    public async Task<Result<TEntity>> DeleteAsync(Guid id, CancellationToken cancellationToken = default)
     {
         var entity = await GetByIdAsync(id, cancellationToken);
-        context.Remove(entity);
+        
+        if (!entity.IsSuccess)
+        {
+            return entity;
+        }
+        context.Remove(entity.Value!);
         await context.SaveChangesAsync(cancellationToken);
+        
+        return Result<TEntity>.Success();
     }
 }

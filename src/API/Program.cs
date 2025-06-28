@@ -1,15 +1,19 @@
+using Infrastructure.Database;
+
 var builder = WebApplication.CreateBuilder(args);
 
-builder.AddServiceDefaults();
-builder.AddLogging();
+builder.AddServiceDefaults()
+    .AddLogging()
+    .AddDatabase();
 
 builder.Services
     .AddApiServices()
     .AddApplicationServices()
-    .AddInfrastructureServices(builder.Configuration);
+    .AddInfrastructureServices();
 
 var app = builder.Build();
 
-app.UseApiServices();
 
+
+app.UseApiServices();
 app.Run();

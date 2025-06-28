@@ -9,5 +9,5 @@ public interface IBaseRepository<TEntity> where TEntity : IEntity
     Task<int> CountAsync(CancellationToken cancellationToken = default);
     Task<Result> CreateAsync(TEntity entity, CancellationToken cancellationToken = default);
     Task UpdateAsync(TEntity entity, CancellationToken cancellationToken = default);
-    Task DeleteAsync(Guid id, CancellationToken cancellationToken = default);
+    Task<Result<TEntity>> DeleteAsync(Guid id, CancellationToken cancellationToken = default);
 }

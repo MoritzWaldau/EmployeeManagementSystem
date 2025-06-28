@@ -37,7 +37,8 @@ public sealed class EmployeeEndpoint : ICarterModule
         group.MapDelete("/{id}", DeleteEmployee)
             .WithSummary("Delete Employee")
             .WithName(nameof(DeleteEmployee))
-            .Produces(StatusCodes.Status204NoContent);
+            .Produces(StatusCodes.Status204NoContent)
+            .Produces(StatusCodes.Status400BadRequest);
     }
     
     private static async Task<IResult> GetAllEmployees([AsParameters] PaginationRequest request, ISender sender)
@@ -68,7 +69,7 @@ public sealed class EmployeeEndpoint : ICarterModule
     
     private static async Task<IResult> DeleteEmployee(Guid id, ISender sender)
     {
-        await sender.Send(new DeleteEmployeeCommand(id));
-        return Results.NoContent();
+        var result = await sender.Send(new DeleteEmployeeCommand(id));
+        return result.Match(_ => Results.NoContent(), err => Results.BadRequest(err.ToProblemDetails($"api/employee/{id}", "Failed to update employee")));
     }
 }

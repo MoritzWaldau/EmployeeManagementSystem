@@ -33,7 +33,8 @@ public static class ResultExtensions
             }
         };
     }
-    public static ProblemDetails ToProblemDetails<T>(this Result<T> result, string path, string title = "An error occurred")
+    
+    public static ProblemDetails ToProblemDetails(this Result result, string path, string title = "An error occurred")
     {
         return new ProblemDetails
         {
