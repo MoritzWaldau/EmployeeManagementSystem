@@ -16,52 +16,38 @@ env:
   RESOURCE_GROUP: rg-employee-management-system-environment
         
 jobs:
-  build-and-push:
+  build:
     runs-on: ubuntu-latest
-  
+
     steps:
-      - uses: actions/checkout@v4
+    - name: Checkout code
+      uses: actions/checkout@v2
 
-      - name: Set up .NET Core
-        uses: actions/setup-dotnet@v4
-        with:
-          dotnet-version: '9.x'
+    - name: Set up .NET
+      uses: actions/setup-dotnet@v3
+      with:
+        dotnet-version: '9.0.x'
 
-      - name: Build solution
-        run: dotnet build --configuration Release
+    - name: Log in to Azure CLI
+      uses: azure/login@v1
+      with:
+        creds: ${{ secrets.AZURE_CREDENTIALS }}
 
-      - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v3
+    - name: Log in to ACR
+      run: |
+        echo ${{ secrets.AZURE_REGISTRY_PASSWORD }} | docker login ${{ env.AZURE_CONTAINER_REGISTRY }}.azurecr.io -u ${{ secrets.AZURE_REGISTRY_USERNAME }} --password-stdin
 
-      - name: Log in to ACR
-        uses: docker/login-action@v3
-        with:
-          registry: ${{ env.AZURE_CONTAINER_REGISTRY }}.azurecr.io
-          username: ${{ secrets.AZURE_REGISTRY_USERNAME }}
-          password: ${{ secrets.AZURE_REGISTRY_PASSWORD }}
-      - name: Build and push container image to ACR
-        uses: docker/build-push-action@v6
-        with:
-          push: true
-          tags: ${{ env.AZURE_CONTAINER_REGISTRY }}.azurecr.io/${{ env.CONTAINER_APP_NAME }}:${{ github.sha }}
-          file: API/Dockerfile
+    - name: Set up Docker Buildx
+      uses: docker/setup-buildx-action@v2
 
-      - name: Azure Login
-        uses: azure/login@v2
-        with:
-          creds: ${{ secrets.AZURE_CREDENTIALS }}
-
-      - name: Deploy to Azure Container Apps
-        uses: azure/container-apps-deploy-action@v1
-        with:
-          imageToDeploy: ${{ env.AZURE_CONTAINER_REGISTRY }}.azurecr.io/${{ env.CONTAINER_APP_NAME }}:${{ github.sha }}
-          resourceGroup: ${{ env.RESOURCE_GROUP }}
-          containerAppName: ${{ env.CONTAINER_APP_NAME }}
-          environmentVariables: |
-            ASPNETCORE_ENVIRONMENT=Development    
-  
+    - name: Build and Push to ACR
+      run: |
+        docker build -t ${{ env.AZURE_CONTAINER_REGISTRY }}/api:latest .
+        docker push ${{ env.AZURE_CONTAINER_REGISTRY }}/api:latest
+         
   tag:
     runs-on: ubuntu-latest
+    needs: build
     permissions:
       contents: write
 
