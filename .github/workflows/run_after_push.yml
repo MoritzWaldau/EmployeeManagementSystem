@@ -24,7 +24,7 @@ jobs:
   
   tests:
     runs-on: windows-latest
-    #needs: build
+    needs: build
     permissions:
       contents: read
     
