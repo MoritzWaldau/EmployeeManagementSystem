@@ -4,7 +4,7 @@ public class ExceptionMiddleware(ILogger<ExceptionMiddleware> logger) : IExcepti
 {
     public async ValueTask<bool> TryHandleAsync(HttpContext context, Exception exception, CancellationToken cancellationToken)
     {
-        //logger.LogError("{Time} Error : {Message}", exception.Message, DateTime.UtcNow);
+        logger.LogError("{Time} Error : {Message}", exception.Message, DateTime.UtcNow);
 
         (string Message, string Title, int StatusCode) details = exception switch
         {
