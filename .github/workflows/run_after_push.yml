@@ -5,7 +5,23 @@ on:
   push:
     branches: ["master"]
     
-jobs:    
+jobs:
+  build:
+    runs-on: windows-latest
+    permissions:
+      contents: write
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up .NET Core
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '9.x'
+
+      - name: Build with dotnet
+        run: dotnet build --configuration Release
+  
   tests:
     runs-on: windows-latest
     #needs: build
