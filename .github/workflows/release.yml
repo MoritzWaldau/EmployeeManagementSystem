@@ -1,0 +1,45 @@
+name: Release Employee Management System
+
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Version for the release'
+        required: true
+      description:
+        description: "Description for the release"
+        required: true
+        
+jobs:
+  create_release:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Set up Git
+      run: |
+        git config user.name "GitHub Actions"
+        git config user.email "github-actions@github.com"
+
+    - name: Create Release Tag
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      run: |
+        git tag ${{ github.event.inputs.version }}
+        git push origin ${{ github.event.inputs.version }}
+
+    - name: Create GitHub Release
+      uses: actions/create-release@v1
+      with:
+        tag_name: ${{ github.event.inputs.version }}
+        release_name: Release ${{ github.event.inputs.version }}
+        body: ${{ github.event.inputs.description }}
+        draft: false
+        prerelease: false
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+  
+
+  
