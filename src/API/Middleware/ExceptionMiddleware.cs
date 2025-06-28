@@ -4,21 +4,15 @@ public class ExceptionMiddleware(ILogger<ExceptionMiddleware> logger) : IExcepti
 {
     public async ValueTask<bool> TryHandleAsync(HttpContext context, Exception exception, CancellationToken cancellationToken)
     {
-        logger.LogError("{Time} Error : {Message}", exception.Message, DateTime.UtcNow);
+        //logger.LogError("{Time} Error : {Message}", exception.Message, DateTime.UtcNow);
 
         (string Message, string Title, int StatusCode) details = exception switch
         {
             ValidationException ex =>
             (
-                ex.Message,
+                "See validationErrors for details.",
                 exception.GetType().Name,
                 context.Response.StatusCode = StatusCodes.Status400BadRequest
-            ),
-            DbUpdateException ex =>
-            (
-                ex.Message,
-                exception.GetType().Name,
-                context.Response.StatusCode = StatusCodes.Status500InternalServerError
             ),
             _ => 
             (
@@ -40,7 +34,7 @@ public class ExceptionMiddleware(ILogger<ExceptionMiddleware> logger) : IExcepti
 
         if (exception is ValidationException validationException)
         {
-            problemDetails.Extensions.Add("ValidationErrors", validationException.Errors);
+            problemDetails.Extensions.Add("validationErrors", validationException.Errors);
         }
 
         await context.Response.WriteAsJsonAsync(problemDetails, cancellationToken: cancellationToken);

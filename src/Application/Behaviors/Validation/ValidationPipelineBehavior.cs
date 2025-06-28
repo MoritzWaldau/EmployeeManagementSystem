@@ -1,6 +1,9 @@
 ﻿namespace Application.Behaviors.Validation;
 
-public sealed class ValidationPipelineBehavior<TRequest, TResponse>(IEnumerable<IValidator<TRequest>> validators, ILogger<ValidationPipelineBehavior<TRequest, TResponse>> logger)
+public sealed class ValidationPipelineBehavior<TRequest, TResponse>(
+    IEnumerable<IValidator<TRequest>> validators, 
+    ILogger<ValidationPipelineBehavior<TRequest, TResponse>> logger
+    )
     : IPipelineBehavior<TRequest, TResponse>
     where TRequest : ICommand<TResponse>
     where TResponse : notnull
@@ -22,7 +25,5 @@ public sealed class ValidationPipelineBehavior<TRequest, TResponse>(IEnumerable<
         logger.LogWarning("Validation failed for request {RequestName}: {Errors}", 
             typeof(TRequest).Name, string.Join(", ", failures.Select(f => f.ErrorMessage)));
         throw new ValidationException(failures);
-
-
     }
 }

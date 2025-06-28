@@ -5,7 +5,7 @@ public sealed class CreateEmployeeCommandHandler(IUnitOfWork unitOfWork, IMapper
 {
     public async Task<Result<EmployeeResponse>> Handle(CreateEmployeeCommand request, CancellationToken cancellationToken)
     {
-        var employee = mapper.Map<Domain.Entities.Employee>(request.Request);
+        var employee = mapper.Map<Domain.Entities.Employee>(request.Employee);
         var result = await unitOfWork.Employees.CreateAsync(employee, cancellationToken);
         if (!result.IsSuccess)
         {
