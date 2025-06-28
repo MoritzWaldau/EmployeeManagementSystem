@@ -19,7 +19,7 @@ jobs:
         with:
           dotnet-version: '9.x'
 
-      - name: Build with dotnet
+      - name: Build solution
         run: dotnet build --configuration Release
   
   tests:
@@ -29,6 +29,11 @@ jobs:
       contents: read
     
     steps:
+      - uses: actions/checkout@v4
+        
+      - name: Zeige Dateien
+        run: ls -R
+        
       - name: Run tests
         run: dotnet test ./tests/Tests/Tests.csproj --configuration Release
   
