@@ -1,7 +1,8 @@
-name: Version and Tag
+name: Update Version
 
 on:
   workflow_dispatch:
+
 
 jobs:
   update_version:
@@ -11,23 +12,16 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v2
 
-      - name: Setup .NET
-        uses: actions/setup-dotnet@v2
-        with:
-          dotnet-version: '9.x'  # Verwenden Sie Ihre spezifische Version
-
-      - name: Update version in .csproj
+      - name: Set fixed version in .csproj
         run: |
-          tag=$(git describe --tags --abbrev=0)
-          versionNumber=${tag#v}
-          sed -i "s|<Version>.*</Version>|<Version>$versionNumber</Version>|g" API.csproj
+          sed -i "s|<Version>.*</Version>|<Version>1.0.0</Version>|g" API.csproj
 
       - name: Commit version update
         run: |
           git config --global user.name "github-actions"
           git config --global user.email "github-actions@github.com"
-          git add YourProjectName.csproj
-          git commit -m "Update version to $versionNumber"
+          git add API.csproj
+          git commit -m "Set version to 1.0.0"
 
       - name: Push changes
         run: |
