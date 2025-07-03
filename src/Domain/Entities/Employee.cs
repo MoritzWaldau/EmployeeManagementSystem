@@ -8,4 +8,7 @@ public sealed class Employee : Entity
     
     [InverseProperty("Employee")]
     public ICollection<Payroll>? Payrolls { get; set; }
+    
+    [InverseProperty("Employee")]
+    public ICollection<Attendance>? Attendances { get; set; }
 }

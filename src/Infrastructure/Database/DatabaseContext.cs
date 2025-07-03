@@ -4,6 +4,7 @@ public class DatabaseContext(DbContextOptions<DatabaseContext> options)
     : DbContext(options)
 {
     public DbSet<Employee> Employees { get; set; }
+    public DbSet<Attendance> Attendances { get; set; }
     public DbSet<Payroll> Payrolls { get; set; }
 
     public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = new())
@@ -52,6 +53,19 @@ public class DatabaseContext(DbContextOptions<DatabaseContext> options)
             entity.Property(e => e.Id).ValueGeneratedOnAdd();
             entity.Property(e => e.IsActive).IsRequired().HasDefaultValue(true);
             entity.Property(e => e.CreatedAt).IsRequired();
+        });
+
+        modelBuilder.Entity<Attendance>(entity =>
+        {
+            entity.Property(e => e.Id).ValueGeneratedOnAdd();
+            entity.Property(e => e.IsActive).IsRequired().HasDefaultValue(true);
+            entity.Property(e => e.CreatedAt).IsRequired();
+            
+            entity.Property(e => e.Date).IsRequired();
+            entity.Property(e => e.CheckInTime).IsRequired();
+            entity.Property(e => e.CheckOutTime).IsRequired();
+            entity.Property(e => e.WorkDuration).IsRequired();
+            entity.Property(e => e.Status).IsRequired();
         });
         
         base.OnModelCreating(modelBuilder);
