@@ -2,8 +2,9 @@ namespace Domain.Enums;
 
 public enum Status
 {
-    Vacation,
-    SickLeave,
-    Training,
-    UnpaidLeave
+    WorkTime = 1,
+    Vacation = 2 ,
+    SickLeave = 3,
+    Training = 4,
+    UnpaidLeave = 5
 }

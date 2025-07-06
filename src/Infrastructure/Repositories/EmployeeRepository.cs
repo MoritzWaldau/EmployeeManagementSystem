@@ -5,12 +5,16 @@ public sealed class EmployeeRepository(DatabaseContext context) :
 {
     private readonly DatabaseContext _context = context;
 
+    private IQueryable<Employee> EmployeeQuery => _context.Employees
+        .Include(e => e.Payrolls)
+        .Include(e => e.Attendances)
+        .AsNoTracking();
+    
     public override async Task<Result<List<Employee>>> GetAllAsync(int pageIndex = 1, int pageSize = 10, CancellationToken cancellationToken = default)
     {
         try
         {
-            var employees = await _context.Employees.Include(x => x.Payrolls)
-                .AsNoTracking()
+            var employees = await EmployeeQuery
                 .OrderBy(x => x.CreatedAt)
                 .Skip((pageIndex - 1) * pageSize)
                 .Take(pageSize)
@@ -26,8 +30,7 @@ public sealed class EmployeeRepository(DatabaseContext context) :
 
     public override async Task<Result<Employee>> GetByIdAsync(Guid id, CancellationToken cancellationToken = default)
     {
-        var entity = await _context.Employees.
-            Include(e => e.Payrolls)
+        var entity = await EmployeeQuery
             .FirstOrDefaultAsync(e => e.Id == id, cancellationToken);
         
         return entity != null ? 

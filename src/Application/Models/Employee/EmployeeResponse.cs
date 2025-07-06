@@ -1,4 +1,6 @@
-﻿namespace Application.Models.Employee;
+﻿using Application.Models.Attendance;
+
+namespace Application.Models.Employee;
 
 public sealed record EmployeeResponse : BaseResponse
 {
@@ -13,5 +15,8 @@ public sealed record EmployeeResponse : BaseResponse
     
     [JsonPropertyName("payrolls")]
     public IEnumerable<PayrollResponse>? Payrolls { get; init; }
+
+    [JsonPropertyName("attendance")]
+    public IEnumerable<AttendanceResponse>? Attendance { get; set; }
 
 }

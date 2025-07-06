@@ -62,9 +62,9 @@ public class DatabaseContext(DbContextOptions<DatabaseContext> options)
             entity.Property(e => e.CreatedAt).IsRequired();
             
             entity.Property(e => e.Date).IsRequired();
-            entity.Property(e => e.CheckInTime).IsRequired();
-            entity.Property(e => e.CheckOutTime).IsRequired();
-            entity.Property(e => e.WorkDuration).IsRequired();
+            entity.Property(e => e.CheckInTime).IsRequired().HasColumnType("time");
+            entity.Property(e => e.CheckOutTime).IsRequired().HasColumnType("time");
+            entity.Property(e => e.WorkDuration).IsRequired().HasColumnType("time");
             entity.Property(e => e.Status).IsRequired();
         });
         

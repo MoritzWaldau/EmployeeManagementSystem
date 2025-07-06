@@ -22,4 +22,8 @@
       <Compile Remove="Models\Pagination\PaginatedResponse.cs" />
     </ItemGroup>
 
+    <ItemGroup>
+      <Folder Include="Features\Attendance\Query\" />
+    </ItemGroup>
+
 </Project>

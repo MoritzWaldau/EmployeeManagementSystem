@@ -11,6 +11,7 @@ public static class DependencyInjection
         services.AddScoped<IUnitOfWork, UnitOfWork>();
         services.AddScoped<IEmployeeRepository<Employee>, EmployeeRepository>();
         services.AddScoped<IPayrollRepository<Payroll>, PayrollRepository>();
+        services.AddScoped<IAttendanceRepository<Attendance>, AttendanceRepository>();
         
         return services;
     }
