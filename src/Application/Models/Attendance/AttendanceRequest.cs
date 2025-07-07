@@ -6,14 +6,14 @@ public sealed record AttendanceRequest
     public required Guid EmployeeId { get; init; }
     
     [JsonPropertyName("date")]
-    public required DateOnly Date { get; init; }
+    public DateOnly? Date { get; init; }
     
     [JsonPropertyName("checkInTime")]
-    public required TimeSpan CheckInTime { get; init; }
+    public TimeSpan? CheckInTime { get; init; }
     
     [JsonPropertyName("checkOutTime")]
-    public required TimeSpan CheckOutTime { get; init; }
+    public TimeSpan? CheckOutTime { get; init; }
     
     [JsonPropertyName("status")]
-    public required Status Status { get; init; }
+    public Status? Status { get; init; }
 }

@@ -9,33 +9,33 @@ public sealed class PayrollEndpoint : ICarterModule
         var group = app.MapGroup("api/payroll");
         
         group.MapGet("/", GetAllPayrolls)
-            .WithSummary("Get All Payrolls")
+            .WithSummary("Get all payrolls")
             .WithName(nameof(GetAllPayrolls))
             .Produces<PaginationResponse<PayrollResponse>>()
             .Produces(StatusCodes.Status400BadRequest);
         
         group.MapGet("/{id:guid}", GetPayrollById)
-            .WithSummary("Get Payroll By Id")
+            .WithSummary("Get payroll by id")
             .WithName(nameof(GetPayrollById))
             .Produces<PayrollResponse>()
             .Produces(StatusCodes.Status400BadRequest);
         
         group.MapPost("/", CreatePayroll)
-            .WithSummary("Create Payroll")
+            .WithSummary("Create payroll")
             .WithName(nameof(CreatePayroll))
             .Accepts<PayrollRequest>("application/json")
             .Produces<PayrollResponse>(StatusCodes.Status201Created)
             .Produces(StatusCodes.Status400BadRequest);
         
         group.MapPut("/{id}", UpdatePayroll)
-            .WithSummary("Update Payroll")
+            .WithSummary("Update payroll")
             .WithName(nameof(UpdatePayroll))
             .Accepts<PayrollRequest>("application/json")
             .Produces<PayrollResponse>()
             .Produces(StatusCodes.Status400BadRequest);
         
         group.MapDelete("/{id}", DeletePayroll)
-            .WithSummary("Delete Payroll")
+            .WithSummary("Delete payroll")
             .WithName(nameof(DeletePayroll))
             .Produces(StatusCodes.Status204NoContent);
     }
@@ -66,12 +66,12 @@ public sealed class PayrollEndpoint : ICarterModule
     private static async Task<IResult> UpdatePayroll(Guid id, PayrollRequest request, ISender sender)
     {
         var result = await sender.Send(new UpdatePayrollCommand(id, request));
-        return result.Match(Results.Ok, Results.BadRequest);
+        return result.Match(Results.Ok, err => Results.BadRequest(err.ToProblemDetails($"api/payroll/{id}", "Failed to update payroll")));
     }
     
     private static async Task<IResult> DeletePayroll(Guid id, ISender sender)
     {
-        await sender.Send(new DeletePayrollCommand(id));
-        return Results.NoContent();
+        var result = await sender.Send(new DeletePayrollCommand(id));
+        return result.Match(_ => Results.NoContent(), err => Results.BadRequest(err.ToProblemDetails($"api/payroll/{id}", "Failed to delete payroll")));
     }
 }

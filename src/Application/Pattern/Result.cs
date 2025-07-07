@@ -31,6 +31,7 @@ public class Result
 public class Result<T> : Result
 {
     public T? Value { get; private init;}
+    public bool HasValue => Value is not null;
     
     public static Result<T> Success(T value)
     {

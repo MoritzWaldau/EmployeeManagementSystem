@@ -9,13 +9,13 @@ public sealed class EmployeeEndpoint : ICarterModule
         var group = app.MapGroup("api/employee");
         
         group.MapGet("/", GetAllEmployees)
-            .WithSummary("Get All Employees")
+            .WithSummary("Get all employess")
             .WithName(nameof(GetAllEmployees))
             .Produces<PaginationResponse<EmployeeResponse>>()
             .Produces(StatusCodes.Status400BadRequest);
         
         group.MapGet("/{id}", GetEmployeeById)
-            .WithSummary("Get Employee By Id")
+            .WithSummary("Get employee by id")
             .WithName(nameof(GetEmployeeById))
             .Produces<EmployeeResponse>()
             .Produces(StatusCodes.Status400BadRequest);
@@ -28,14 +28,14 @@ public sealed class EmployeeEndpoint : ICarterModule
             .Produces(StatusCodes.Status400BadRequest);
         
         group.MapPut("/{id}", UpdateEmployee)
-            .WithSummary("Update Employee")
+            .WithSummary("Update employee")
             .WithName(nameof(UpdateEmployee))
             .Accepts<EmployeeRequest>("application/json")
             .Produces<EmployeeResponse>()
             .Produces(StatusCodes.Status400BadRequest);
         
         group.MapDelete("/{id}", DeleteEmployee)
-            .WithSummary("Delete Employee")
+            .WithSummary("Delete employee")
             .WithName(nameof(DeleteEmployee))
             .Produces(StatusCodes.Status204NoContent)
             .Produces(StatusCodes.Status400BadRequest);
@@ -70,6 +70,6 @@ public sealed class EmployeeEndpoint : ICarterModule
     private static async Task<IResult> DeleteEmployee(Guid id, ISender sender)
     {
         var result = await sender.Send(new DeleteEmployeeCommand(id));
-        return result.Match(_ => Results.NoContent(), err => Results.BadRequest(err.ToProblemDetails($"api/employee/{id}", "Failed to update employee")));
+        return result.Match(_ => Results.NoContent(), err => Results.BadRequest(err.ToProblemDetails($"api/employee/{id}", "Failed to delete employee")));
     }
 }

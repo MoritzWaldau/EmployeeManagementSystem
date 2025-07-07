@@ -9,13 +9,12 @@ public sealed class GetAllEmployeesQueryHandler(IUnitOfWork unitOfWork, IMapper 
         var totalPages = (int)Math.Ceiling((double)totalEmployees / request.Request.PageSize);
         var result = await unitOfWork.Employees.GetAllAsync(request.Request.PageIndex, request.Request.PageSize, cancellationToken);
         
-        if (!result.IsSuccess)
+        if (!result.IsSuccess || !result.HasValue)
         {
             return Result<PaginationResponse<EmployeeResponse>>.Failure(result.ErrorMessage);
         }
-        
-        var employees = result.Value;
-        var mappedEmployees = mapper.Map<List<EmployeeResponse>>(employees);
+
+        var mappedEmployees = mapper.Map<List<EmployeeResponse>>(result.Value);
         return Result<PaginationResponse<EmployeeResponse>>.Success(
             new PaginationResponse<EmployeeResponse>(
                 request.Request.PageIndex,
