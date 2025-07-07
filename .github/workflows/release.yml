@@ -2,8 +2,6 @@ name: Release
 
 on:
   workflow_dispatch:
-    branches:
-      - master
     inputs:
       version:
         description: 'Version for the release'
