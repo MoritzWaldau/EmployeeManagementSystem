@@ -20,9 +20,7 @@ namespace API.Endpoints
 
         private static IResult FakeData(int count, DatabaseContext context)
         {
-            var dataFaker = new DatabaseFaker();
-            var employees = dataFaker.GenerateEmployees(count);
-
+            var employees = DatabaseFaker.GenerateSampleData(count);
             context.Employees.AddRange(employees);  
             context.SaveChanges();
 

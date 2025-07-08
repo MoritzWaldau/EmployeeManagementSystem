@@ -17,6 +17,6 @@ public sealed record EmployeeResponse : BaseResponse
     public IEnumerable<PayrollResponse>? Payrolls { get; init; }
 
     [JsonPropertyName("attendance")]
-    public IEnumerable<AttendanceResponse>? Attendance { get; set; }
+    public IEnumerable<AttendanceResponse>? Attendances { get; set; }
 
 }

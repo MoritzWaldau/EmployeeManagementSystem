@@ -8,6 +8,6 @@ public class AttendanceProfile : Profile
     {
         CreateMap<Attendance, AttendanceResponse>();
         CreateMap<AttendanceRequest, Attendance>()
-            .ForMember(x => x.WorkDuration, opt => opt.MapFrom(src => src.CheckOutTime - src.CheckInTime));
+            .ForMember(x => x.WorkDuration, opt => opt.MapFrom(src => Convert.ToDouble(src.CheckOutTime - src.CheckInTime)));
     }
 }

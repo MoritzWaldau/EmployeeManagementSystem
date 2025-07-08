@@ -2,6 +2,7 @@
 
 public class DatabaseFaker 
 {
+    private static readonly DatabaseFaker Instance = new DatabaseFaker();
     private readonly Faker<Employee> _employeeFaker;
     private readonly Faker<Payroll> _payrollFaker;
     private readonly Faker<Attendance> _attendanceFaker;
@@ -36,21 +37,21 @@ public class DatabaseFaker
             .RuleFor(x => x.IsActive, true);
     }
     
-    public List<Employee> GenerateEmployees(int count)
+    public static List<Employee> GenerateSampleData(int count)
     {
 
-        var employees = _employeeFaker.Generate(count);
+        var employees = Instance._employeeFaker.Generate(count);
 
         foreach (var employee in employees)
         {
-            employee.Payrolls = _payrollFaker.Generate(3);
+            employee.Payrolls = Instance._payrollFaker.Generate(3);
 
             foreach (var payroll in employee.Payrolls)
             {
                 payroll.EmployeeId = employee.Id;
             }
 
-            employee.Attendances = _attendanceFaker.Generate(10);
+            employee.Attendances = Instance._attendanceFaker.Generate(10);
 
             foreach (var attendance in employee.Attendances)
             {
@@ -60,6 +61,32 @@ public class DatabaseFaker
         }
 
         return employees;
+    }
+
+    private static Payroll GenerateTestPayroll()
+    {
+        return Instance._payrollFaker.Generate(1).First();
+    }
+    
+    private static Attendance GenerateTestAttendance()
+    {
+        return Instance._attendanceFaker.Generate(1).First();
+    }
+
+    private static Employee GenerateTestEmployee()
+    {
+        return Instance._employeeFaker.Generate(1).First();
+    }
+    
+    public static T GenerateTestEntity<T>() where T : Entity
+    {
+        return typeof(T).Name switch
+        {
+            nameof(Employee) => (T)(object)GenerateTestEmployee(),
+            nameof(Payroll) => (T)(object)GenerateTestPayroll(),
+            nameof(Attendance) => (T)(object)GenerateTestAttendance(),
+            _ => throw new InvalidOperationException($"No faker defined for type {typeof(T).Name}")
+        };
     }
 
 }
