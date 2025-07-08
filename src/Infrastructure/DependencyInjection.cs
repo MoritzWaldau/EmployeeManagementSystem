@@ -1,4 +1,8 @@
-﻿namespace Infrastructure;
+﻿using Microsoft.Extensions.Caching.Hybrid;
+using Microsoft.Extensions.Caching.StackExchangeRedis;
+using ZiggyCreatures.Caching.Fusion;
+
+namespace Infrastructure;
 
 public static class DependencyInjection
 {
@@ -12,7 +16,7 @@ public static class DependencyInjection
         services.AddScoped<IEmployeeRepository<Employee>, EmployeeRepository>();
         services.AddScoped<IPayrollRepository<Payroll>, PayrollRepository>();
         services.AddScoped<IAttendanceRepository<Attendance>, AttendanceRepository>();
-        
+
         return services;
     }
 }

@@ -22,12 +22,6 @@ public class DatabaseContext(DbContextOptions<DatabaseContext> options)
                 case { State: EntityState.Modified }:
                     entry.Entity.ModifiedAt = DateTime.SpecifyKind(DateTime.Now, DateTimeKind.Utc);
                     break;
-                
-                case { State: EntityState.Deleted }:
-                    entry.State = EntityState.Modified;
-                    entry.Entity.ModifiedAt = DateTime.SpecifyKind(DateTime.Now, DateTimeKind.Utc);
-                    entry.Entity.IsActive = false;
-                    break;
             }
         }
         

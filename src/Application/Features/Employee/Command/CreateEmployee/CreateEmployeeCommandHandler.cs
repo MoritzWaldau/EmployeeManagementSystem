@@ -1,6 +1,9 @@
-﻿namespace Application.Features.Employee.Command.CreateEmployee;
+﻿using Application.Common;
+using Microsoft.Extensions.Caching.Hybrid;
 
-public sealed class CreateEmployeeCommandHandler(IUnitOfWork unitOfWork, IMapper mapper) 
+namespace Application.Features.Employee.Command.CreateEmployee;
+
+public sealed class CreateEmployeeCommandHandler(IUnitOfWork unitOfWork, IMapper mapper, HybridCache cache) 
     : ICommandHandler<CreateEmployeeCommand, Result<EmployeeResponse>>
 {
     public async Task<Result<EmployeeResponse>> Handle(CreateEmployeeCommand request, CancellationToken cancellationToken)
@@ -13,6 +16,7 @@ public sealed class CreateEmployeeCommandHandler(IUnitOfWork unitOfWork, IMapper
         }
         
         var mappedEmployee = mapper.Map<EmployeeResponse>(employee);
+        await cache.RemoveByTagAsync(CacheTags.EmployeeTag, cancellationToken);
         return Result<EmployeeResponse>.Success(mappedEmployee);
     }
 }

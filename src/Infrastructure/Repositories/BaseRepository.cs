@@ -50,10 +50,19 @@ public class BaseRepository<TEntity>(DatabaseContext context)
         return Result.Success();
     }
 
-    public virtual async Task UpdateAsync(TEntity entity, CancellationToken cancellationToken = default)
+    public virtual async Task<Result> UpdateAsync(TEntity entity, CancellationToken cancellationToken = default)
     {
-        context.Update(entity);
-        await context.SaveChangesAsync(cancellationToken);
+        try
+        {
+            context.Update(entity);
+            await context.SaveChangesAsync(cancellationToken);
+        }
+        catch (Exception ex)
+        {
+            return Result.Failure(ex.Message);
+        }
+        
+        return Result.Success();
     }
 
     public async Task<Result<TEntity>> DeleteAsync(Guid id, CancellationToken cancellationToken = default)

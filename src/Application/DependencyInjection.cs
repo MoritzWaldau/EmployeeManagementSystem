@@ -1,4 +1,6 @@
-﻿namespace Application;
+﻿using Microsoft.Extensions.Caching.Hybrid;
+
+namespace Application;
 
 public static class DependencyInjection
 {
@@ -13,6 +15,15 @@ public static class DependencyInjection
         
         services.AddValidatorsFromAssembly(Assembly.GetExecutingAssembly());
         services.AddAutoMapper(Assembly.GetExecutingAssembly());
+        
+        services.AddHybridCache(x =>
+        {
+            x.DefaultEntryOptions = new HybridCacheEntryOptions
+            {
+                LocalCacheExpiration = TimeSpan.FromMinutes(1),
+                Expiration = TimeSpan.FromMinutes(5),
+            };
+        });  
 
         return services;
     }
