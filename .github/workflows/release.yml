@@ -15,6 +15,31 @@ permissions:
   contents: read
         
 jobs:
+  prepare:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Update value in appsettings.json
+        run: |
+          cat appsettings.json
+          
+          sed -i 's/"Version": "[^"]*"/"Version": "${{ github.event.inputs.version }}"/' appsettings.json
+
+          echo "Nach der Änderung:"
+          cat appsettings.json
+        
+      - name: Commit changes
+        run: |
+          git config --global user.name 'github-actions'
+          git config --global user.email 'github-actions@users.noreply.github.com'
+          git add .
+          git diff --cached --quiet || git commit -m "Auto format C# code"
+          git push
+
+  
   release:
     runs-on: ubuntu-latest
     env:
