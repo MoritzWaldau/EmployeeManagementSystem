@@ -24,12 +24,12 @@ jobs:
 
       - name: Update value in appsettings.json
         run: |
-          cat appsettings.json
+          cat ./src/API/appsettings.json
           
-          sed -i 's/"Version": "[^"]*"/"Version": "${{ github.event.inputs.version }}"/' appsettings.json
+          sed -i 's/"Version": "[^"]*"/"Version": "${{ github.event.inputs.version }}"/' ./src/API/appsettings.json
 
           echo "Nach der Änderung:"
-          cat appsettings.json
+          cat ./src/API/appsettings.json
         
       - name: Commit changes
         run: |
@@ -42,6 +42,7 @@ jobs:
   
   release:
     runs-on: ubuntu-latest
+    needs: prepare
     env:
       AZURE_CLIENT_ID: ${{ vars.AZURE_CLIENT_ID }}
       AZURE_TENANT_ID: ${{ vars.AZURE_TENANT_ID }}
