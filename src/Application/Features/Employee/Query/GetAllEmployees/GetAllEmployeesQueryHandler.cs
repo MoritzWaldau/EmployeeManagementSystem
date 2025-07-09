@@ -1,7 +1,4 @@
-﻿using Application.Common;
-using Microsoft.Extensions.Caching.Hybrid;
-
-namespace Application.Features.Employee.Query.GetAllEmployees;
+﻿namespace Application.Features.Employee.Query.GetAllEmployees;
 
 public sealed class GetAllEmployeesQueryHandler(IUnitOfWork unitOfWork, IMapper mapper, HybridCache cache) 
     : IQueryHandler<GetAllEmployeesQuery, Result<PaginationResponse<EmployeeResponse>>>

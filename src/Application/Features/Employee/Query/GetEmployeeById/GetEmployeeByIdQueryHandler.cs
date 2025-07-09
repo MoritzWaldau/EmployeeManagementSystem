@@ -17,8 +17,9 @@ public class GetEmployeeByIdQueryHandler(IUnitOfWork unitOfWork, IMapper mapper,
             
             errorMessage = resultFromDb.ErrorMessage;
             return null;
-
-        }, tags: [CacheTags.EmployeeTag], cancellationToken: cancellationToken);
+        },
+        tags: [CacheTags.EmployeeTag], 
+        cancellationToken: cancellationToken);
         
        
         return mappedEntity is null 

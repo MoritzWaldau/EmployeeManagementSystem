@@ -1,7 +1,4 @@
-﻿using Application.Common;
-using Microsoft.Extensions.Caching.Hybrid;
-
-namespace Application.Features.Employee.Command.CreateEmployee;
+﻿namespace Application.Features.Employee.Command.CreateEmployee;
 
 public sealed class CreateEmployeeCommandHandler(IUnitOfWork unitOfWork, IMapper mapper, HybridCache cache) 
     : ICommandHandler<CreateEmployeeCommand, Result<EmployeeResponse>>

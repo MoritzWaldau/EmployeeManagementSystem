@@ -1,6 +1,6 @@
 ﻿namespace Application.Features.Payroll.Command.UpdatePayroll;
 
-public class UpdatePayrollCommandHandler(IUnitOfWork unitOfWork, IMapper mapper) 
+public class UpdatePayrollCommandHandler(IUnitOfWork unitOfWork, IMapper mapper, HybridCache cache) 
     : ICommandHandler<UpdatePayrollCommand, Result<PayrollResponse>>
 {
     public async Task<Result<PayrollResponse>> Handle(UpdatePayrollCommand request, CancellationToken cancellationToken)
@@ -9,7 +9,7 @@ public class UpdatePayrollCommandHandler(IUnitOfWork unitOfWork, IMapper mapper)
         
         if (!result.IsSuccess)
         {
-            return Result<PayrollResponse>.Failure("");
+            return Result<PayrollResponse>.Failure(result.ErrorMessage);
         }
         
         var entity = result.Value!;
@@ -20,8 +20,15 @@ public class UpdatePayrollCommandHandler(IUnitOfWork unitOfWork, IMapper mapper)
         entity.GrossSalary = request.Request.GrossSalary ?? entity.GrossSalary;
         entity.NetSalary = request.Request.NetSalary ?? entity.NetSalary;
         
-        await unitOfWork.Payrolls.UpdateAsync(entity, cancellationToken);
+        var updateResult = await unitOfWork.Payrolls.UpdateAsync(entity, cancellationToken);
+
+        if (!updateResult.IsSuccess)
+        {
+            return Result<PayrollResponse>.Failure(updateResult.ErrorMessage);
+        }
+
         var mappedResponse = mapper.Map<PayrollResponse>(entity);
+        await cache.RemoveByTagAsync(CacheTags.PayrollTag, cancellationToken: cancellationToken);
         return Result<PayrollResponse>.Success(mappedResponse);
     }
 }

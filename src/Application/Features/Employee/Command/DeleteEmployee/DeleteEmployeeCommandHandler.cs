@@ -1,7 +1,4 @@
-﻿using Application.Common;
-using Microsoft.Extensions.Caching.Hybrid;
-
-namespace Application.Features.Employee.Command.DeleteEmployee;
+﻿namespace Application.Features.Employee.Command.DeleteEmployee;
 
 public sealed class DeleteEmployeeCommandHandler(IUnitOfWork unitOfWork, HybridCache cache) : ICommandHandler<DeleteEmployeeCommand, Result<EmployeeResponse>>
 {

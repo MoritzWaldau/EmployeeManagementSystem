@@ -1,6 +1,6 @@
 namespace Application.Features.Attendance.Command.UpdateAttendance;
 
-public sealed class UpdateAttendanceCommandHandler(IUnitOfWork unitOfWork, IMapper mapper)
+public sealed class UpdateAttendanceCommandHandler(IUnitOfWork unitOfWork, IMapper mapper, HybridCache cache)
     : ICommandHandler<UpdateAttendanceCommand, Result<AttendanceResponse>>
 {
     public async Task<Result<AttendanceResponse>> Handle(UpdateAttendanceCommand request, CancellationToken cancellationToken)
@@ -19,8 +19,13 @@ public sealed class UpdateAttendanceCommandHandler(IUnitOfWork unitOfWork, IMapp
         entity.CheckInTime = request.Attendance.CheckInTime ?? entity.CheckInTime;
         entity.CheckOutTime = request.Attendance.CheckOutTime ?? entity.CheckOutTime;
         
-        await unitOfWork.Attendances.UpdateAsync(entity, cancellationToken);
+        var updatedResult = await unitOfWork.Attendances.UpdateAsync(entity, cancellationToken);
+        if (!updatedResult.IsSuccess)
+        {
+            return Result<AttendanceResponse>.Failure(updatedResult.ErrorMessage);
+        }
         var mappedResponse = mapper.Map<AttendanceResponse>(entity);
+        await cache.RemoveByTagAsync(CacheTags.AttendanceTag, cancellationToken: cancellationToken);
         return Result<AttendanceResponse>.Success(mappedResponse);
     }
 }

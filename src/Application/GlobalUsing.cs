@@ -1,6 +1,7 @@
 ﻿global using Application.Abstraction;
 global using Application.Behaviors;
 global using Application.Behaviors.Validation;
+global using Application.Common;
 global using Application.Models.Attendance;
 global using Application.Models.Employee;
 global using Application.Models.Pagination;
@@ -13,6 +14,7 @@ global using Domain.Entities;
 global using Domain.Enums;
 global using FluentValidation;
 global using MediatR;
+global using Microsoft.Extensions.Caching.Hybrid;
 global using Microsoft.Extensions.DependencyInjection;
 global using Microsoft.Extensions.Logging;
 global using System.Diagnostics;

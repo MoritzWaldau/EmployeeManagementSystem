@@ -1,17 +1,25 @@
 namespace Application.Features.Attendance.Query.GetAttendanceById;
 
-public sealed class GetAttendanceByIdQueryHandler(IUnitOfWork unitOfWork, IMapper mapper) 
+public sealed class GetAttendanceByIdQueryHandler(IUnitOfWork unitOfWork, IMapper mapper, HybridCache cache) 
     : IQueryHandler<GetAttendanceByIdQuery, Result<AttendanceResponse>>
 {
     public async Task<Result<AttendanceResponse>> Handle(GetAttendanceByIdQuery request, CancellationToken cancellationToken)
     {
-        var result = await unitOfWork.Attendances.GetByIdAsync(request.Id, cancellationToken);
-        if (!result.IsSuccess || result.HasValue)
+        var errorMessage = "";
+        var mappedAttendance = await cache.GetOrCreateAsync($"{CacheKeys.AttendanceKey}{request.Id}", async ct =>
         {
-            return Result<AttendanceResponse>.Failure(result.ErrorMessage);
-        }
-        
-        var mappedAttendance = mapper.Map<AttendanceResponse>(result.Value);
-        return Result<AttendanceResponse>.Success(mappedAttendance);
+            var resultFromDb = await unitOfWork.Attendances.GetByIdAsync(request.Id, ct);
+            if (resultFromDb is { IsSuccess: true, HasValue: true })
+                return mapper.Map<AttendanceResponse>(resultFromDb.Value);
+            
+            errorMessage = resultFromDb.ErrorMessage;
+            return null;
+        }, 
+        tags: [CacheTags.AttendanceTag], 
+        cancellationToken: cancellationToken);
+
+        return mappedAttendance is null 
+            ? Result<AttendanceResponse>.Failure(errorMessage) 
+            : Result<AttendanceResponse>.Success(mappedAttendance);
     }
 }

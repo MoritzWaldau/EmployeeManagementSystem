@@ -1,7 +1,4 @@
-﻿using Application.Common;
-using Microsoft.Extensions.Caching.Hybrid;
-
-namespace Application.Features.Employee.Command.UpdateEmployee;
+﻿namespace Application.Features.Employee.Command.UpdateEmployee;
 
 public class UpdateEmployeeCommandHandler(IUnitOfWork unitOfWork, IMapper mapper, HybridCache cache)
     : ICommandHandler<UpdateEmployeeCommand, Result<EmployeeResponse>>
@@ -29,7 +26,7 @@ public class UpdateEmployeeCommandHandler(IUnitOfWork unitOfWork, IMapper mapper
         }
         
         var mappedResponse = mapper.Map<EmployeeResponse>(entity);
-        await cache.RemoveByTagAsync(CacheKeys.EmployeeKey, cancellationToken: cancellationToken);
+        await cache.RemoveByTagAsync(CacheTags.EmployeeTag, cancellationToken: cancellationToken);
         return Result<EmployeeResponse>.Success(mappedResponse);
     }
 }

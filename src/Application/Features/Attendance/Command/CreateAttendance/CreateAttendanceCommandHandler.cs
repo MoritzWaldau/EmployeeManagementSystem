@@ -1,8 +1,6 @@
-using Application.Models.Attendance;
-
 namespace Application.Features.Attendance.Command.CreateAttendance;
 
-public sealed class CreateAttendanceCommandHandler(IUnitOfWork unitOfWork, IMapper mapper) 
+public sealed class CreateAttendanceCommandHandler(IUnitOfWork unitOfWork, IMapper mapper, HybridCache cache) 
     : ICommandHandler<CreateAttendanceCommand, Result<AttendanceResponse>>
 {
     public async Task<Result<AttendanceResponse>> Handle(CreateAttendanceCommand request, CancellationToken cancellationToken)
@@ -15,6 +13,7 @@ public sealed class CreateAttendanceCommandHandler(IUnitOfWork unitOfWork, IMapp
         }
 
         var response = mapper.Map<AttendanceResponse>(attendance);
+        await cache.RemoveByTagAsync(CacheTags.AttendanceTag, cancellationToken);
         return Result<AttendanceResponse>.Success(response);
     }
 }
