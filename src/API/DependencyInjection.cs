@@ -4,7 +4,7 @@ namespace API;
 
 public static class DependencyInjection
 {
-    public static IServiceCollection AddApiServices(this IServiceCollection services)
+    public static IServiceCollection AddApiServices(this IServiceCollection services, IConfiguration configuration)
     {
         services.AddCarter();
         services.AddHealthChecks();
@@ -12,7 +12,7 @@ public static class DependencyInjection
         services.AddExceptionHandler<ExceptionMiddleware>();
         //services.AddTransient<LoggingMiddleware>();
         services.AddHttpContextAccessor();
-        services.AddSwagger();
+        services.AddSwagger(configuration);
         services.ConfigureHttpJsonOptions(options =>
         {
             options.SerializerOptions.DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull;
@@ -22,11 +22,11 @@ public static class DependencyInjection
         return services;
     }
     
-    private static void AddSwagger(this IServiceCollection services)
+    private static void AddSwagger(this IServiceCollection services, IConfiguration configuration)
     {
         services.AddSwaggerGen(x =>
         {
-            x.SwaggerDoc("v1", new OpenApiInfo { Title = "Employee Management System API"});
+            x.SwaggerDoc($"v{configuration["Version"]}", new OpenApiInfo { Title = "Employee Management System API"});
         });
     }
 

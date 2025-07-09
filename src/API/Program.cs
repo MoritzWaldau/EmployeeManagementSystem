@@ -7,7 +7,7 @@ builder.AddServiceDefaults()
     .AddDatabase();
 
 builder.Services
-    .AddApiServices()
+    .AddApiServices(builder.Configuration)
     .AddApplicationServices()
     .AddInfrastructureServices();
 
