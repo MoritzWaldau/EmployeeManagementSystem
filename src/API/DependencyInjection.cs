@@ -26,7 +26,10 @@ public static class DependencyInjection
     {
         services.AddSwaggerGen(x =>
         {
-            x.SwaggerDoc($"v{configuration["Version"]}", new OpenApiInfo { Title = "Employee Management System API"});
+            x.SwaggerDoc("v1", new OpenApiInfo
+            {
+                Title = $"Employee Management System API",
+            });
         });
     }
 
