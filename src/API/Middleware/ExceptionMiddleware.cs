@@ -8,12 +8,6 @@ public class ExceptionMiddleware(ILogger<ExceptionMiddleware> logger) : IExcepti
 
         (string Message, string Title, int StatusCode) details = exception switch
         {
-            ValidationException ex =>
-            (
-                "See validationErrors for details.",
-                exception.GetType().Name,
-                context.Response.StatusCode = StatusCodes.Status400BadRequest
-            ),
             _ => 
             (
                 exception.Message,
@@ -31,11 +25,6 @@ public class ExceptionMiddleware(ILogger<ExceptionMiddleware> logger) : IExcepti
         };
         
         problemDetails.Extensions.Add("traceId", context.TraceIdentifier);
-
-        if (exception is ValidationException validationException)
-        {
-            problemDetails.Extensions.Add("validationErrors", validationException.Errors);
-        }
 
         await context.Response.WriteAsJsonAsync(problemDetails, cancellationToken: cancellationToken);
         return true;

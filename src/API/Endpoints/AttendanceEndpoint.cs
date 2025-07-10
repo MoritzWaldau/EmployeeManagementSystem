@@ -1,11 +1,3 @@
-using API.Extensions;
-using Application.Features.Attendance.Command.CreateAttendance;
-using Application.Features.Attendance.Command.DeleteAttendance;
-using Application.Features.Attendance.Command.UpdateAttendance;
-using Application.Features.Attendance.Query.GetAllAttendance;
-using Application.Features.Attendance.Query.GetAttendanceById;
-using Application.Models.Attendance;
-
 namespace API.Endpoints;
 
 public sealed class AttendanceEndpoint : ICarterModule
@@ -48,36 +40,36 @@ public sealed class AttendanceEndpoint : ICarterModule
         
     }
     
-    private static async Task<IResult> GetAllAttendance([AsParameters] PaginationRequest request, ISender sender)
+    private static async Task<IResult> GetAllAttendance([AsParameters] PaginationRequest request, IAttendanceService attendanceService)
     {
-        var result = await sender.Send(new GetAllAttendancesQuery(request));
+        var result = await attendanceService.GetAllAsync(request);
         return result.Match(Results.Ok, err => Results.BadRequest(err.ToProblemDetails("api/attendance", "Failed to get all attendances")));
     }
     
-    private static async Task<IResult> GetAttendanceById(ISender sender, Guid id)
+    private static async Task<IResult> GetAttendanceById(Guid id, IAttendanceService attendanceService)
     {
-        var result = await sender.Send(new GetAttendanceByIdQuery(id));
+        var result = await attendanceService.GetByIdAsync(id);
         return result.Match(Results.Ok, err => Results.BadRequest(err.ToProblemDetails($"api/attendance/{id}", "Failed to get attendance by id")));
     }
     
-    private static async Task<IResult> CreateAttendance(ISender sender, AttendanceRequest request)
+    private static async Task<IResult> CreateAttendance(AttendanceRequest request, IAttendanceService attendanceService)
     {
-        var result = await sender.Send(new CreateAttendanceCommand(request));
+        var result = await attendanceService.CreateAsync(request);
         return result.Match(x => Results.Created(
                 $"/api/attendance/{result.Value!.Id}", result.Value!), 
-            err => Results.BadRequest(err.ToProblemDetails($"/api/attendance/{result.Value!.Id}", "Failed to create attendance"))
+            err => Results.BadRequest(err.ToProblemDetails($"/api/attendance", "Failed to create attendance"))
         );
     }
     
-    private static async Task<IResult> UpdateAttendance(Guid id, AttendanceRequest request, ISender sender)
+    private static async Task<IResult> UpdateAttendance(Guid id, AttendanceRequest request, IAttendanceService attendanceService)
     {
-        var result = await sender.Send(new UpdateAttendanceCommand(id, request));
+        var result = await attendanceService.UpdateAsync(id, request);
         return result.Match(Results.Ok, err => Results.BadRequest(err.ToProblemDetails($"api/attendance/{id}", "Failed to update attendance")));
     }
     
-    private static async Task<IResult> DeleteAttendance(Guid id, ISender sender)
+    private static async Task<IResult> DeleteAttendance(Guid id, IAttendanceService attendanceService)
     {
-        var result = await sender.Send(new DeleteAttendanceCommand(id));
+        var result = await attendanceService.DeleteAsync(id);
         return result.Match(_ => Results.NoContent(), err => Results.BadRequest(err.ToProblemDetails($"api/attendance/{id}", "Failed to delete attendance")));
     }
 }

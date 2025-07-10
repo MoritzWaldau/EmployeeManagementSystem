@@ -40,38 +40,38 @@ public sealed class PayrollEndpoint : ICarterModule
             .Produces(StatusCodes.Status204NoContent);
     }
     
-    private static async Task<IResult> GetAllPayrolls([AsParameters] PaginationRequest request, ISender sender)
+    private static async Task<IResult> GetAllPayrolls([AsParameters] PaginationRequest request, IPayrollService payrollService)
     {
-        var result = await sender.Send(new GetAllPayrollsQuery(request));
+        var result = await payrollService.GetAllAsync(request);
         return result.Match(Results.Ok, err => Results.BadRequest(err.ToProblemDetails("api/payroll", "Failed to get all payrolls")));
 
     }
     
-    private static async Task<IResult> GetPayrollById(Guid id, ISender sender)
+    private static async Task<IResult> GetPayrollById(Guid id, IPayrollService payrollService)
     {
-        var result = await sender.Send(new GetPayrollByIdQuery(id));
+        var result = await payrollService.GetByIdAsync(id);
         return result.Match(Results.Ok, err => Results.BadRequest(err.ToProblemDetails($"api/payroll/{id}", "Failed to get payroll by id")));
 
     }
     
-    private static async Task<IResult> CreatePayroll(PayrollRequest request, ISender sender)
+    private static async Task<IResult> CreatePayroll(PayrollRequest request, IPayrollService payrollService)
     {
-        var result = await sender.Send(new CreatePayrollCommand(request));
+        var result = await payrollService.CreateAsync(request);
         return result.Match(x => Results.Created(
                 $"/api/payroll/{result.Value!.Id}", result.Value!), 
-            err => Results.BadRequest(err.ToProblemDetails($"/api/payroll/{result.Value!.Id}", "Failed to create payroll"))
+            err => Results.BadRequest(err.ToProblemDetails($"/api/payroll", "Failed to create payroll"))
         );
     }
     
-    private static async Task<IResult> UpdatePayroll(Guid id, PayrollRequest request, ISender sender)
+    private static async Task<IResult> UpdatePayroll(Guid id, PayrollRequest request, IPayrollService payrollService)
     {
-        var result = await sender.Send(new UpdatePayrollCommand(id, request));
+        var result = await payrollService.UpdateAsync(id, request);
         return result.Match(Results.Ok, err => Results.BadRequest(err.ToProblemDetails($"api/payroll/{id}", "Failed to update payroll")));
     }
     
-    private static async Task<IResult> DeletePayroll(Guid id, ISender sender)
+    private static async Task<IResult> DeletePayroll(Guid id, IPayrollService payrollService)
     {
-        var result = await sender.Send(new DeletePayrollCommand(id));
+        var result = await payrollService.DeleteAsync(id);
         return result.Match(_ => Results.NoContent(), err => Results.BadRequest(err.ToProblemDetails($"api/payroll/{id}", "Failed to delete payroll")));
     }
 }

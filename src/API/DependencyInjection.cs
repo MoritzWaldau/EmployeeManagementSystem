@@ -33,7 +33,6 @@ public static class DependencyInjection
         });
     }
 
-
     public static void UseApiServices(this WebApplication app)
         => app
             .UseSwaggerServices()

@@ -23,4 +23,9 @@
       <Compile Remove="Models\Pagination\PaginatedResponse.cs" />
     </ItemGroup>
 
+    <ItemGroup>
+      <Folder Include="Abstraction\Repository\" />
+      <Folder Include="Validator\Payroll\" />
+    </ItemGroup>
+
 </Project>

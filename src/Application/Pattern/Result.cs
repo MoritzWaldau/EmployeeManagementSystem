@@ -1,15 +1,28 @@
-﻿namespace Application.Pattern;
+﻿using FluentValidation.Results;
+
+namespace Application.Pattern;
 
 public class Result
 {
     public bool IsSuccess { get; protected init; }
     public string ErrorMessage { get; protected init; } = string.Empty;
+    public List<ValidationFailure> ValidationErrors { get; protected init; } = [];
     
     public static Result Failure(string errorMessage)
     {
         return new Result
         {
             IsSuccess = false,
+            ErrorMessage = errorMessage
+        };
+    }
+    
+    public static Result Failure(string errorMessage, List<ValidationFailure> validationFailures)
+    {
+        return new Result
+        {
+            IsSuccess = false,
+            ValidationErrors = validationFailures,
             ErrorMessage = errorMessage
         };
     }
@@ -56,6 +69,15 @@ public class Result<T> : Result
         {
             IsSuccess = false,
             ErrorMessage = errorMessage,
+        };
+    }
+    
+    public static Result<T> Failure(List<ValidationFailure> validationFailures)
+    {
+        return new Result<T>
+        {
+            IsSuccess = false,
+            ValidationErrors = validationFailures
         };
     }
     

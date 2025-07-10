@@ -14,8 +14,6 @@ namespace API.Endpoints
                 .WithSummary("Generate fake data")
                 .WithName(nameof(FakeData))
                 .Produces<List<Employee>>();
-             
-
         }
 
         private static IResult FakeData(int count, DatabaseContext context)

@@ -1,6 +1,4 @@
-﻿using API.Extensions;
-
-namespace API.Endpoints;
+﻿namespace API.Endpoints;
 
 public sealed class EmployeeEndpoint : ICarterModule
 {
@@ -41,35 +39,35 @@ public sealed class EmployeeEndpoint : ICarterModule
             .Produces(StatusCodes.Status400BadRequest);
     }
     
-    private static async Task<IResult> GetAllEmployees([AsParameters] PaginationRequest request, ISender sender)
+    private static async Task<IResult> GetAllEmployees([AsParameters] PaginationRequest request, IEmployeeService employeeService)
     {
-        var result = await sender.Send(new GetAllEmployeesQuery(request));
+        var result = await employeeService.GetAllAsync(request);
         return result.Match(Results.Ok, err => Results.BadRequest(err.ToProblemDetails("api/employee", "Failed to get all employees")));
     }
 
-    private static async Task<IResult> GetEmployeeById(ISender sender, Guid id)
+    private static async Task<IResult> GetEmployeeById(Guid id, IEmployeeService employeeService)
     {
-        var result = await sender.Send(new GetEmployeeByIdQuery(id));
+        var result = await employeeService.GetByIdAsync(id);
         return result.Match(Results.Ok, err => Results.BadRequest(err.ToProblemDetails($"api/employee/{id}", "Failed to get employee by id")));
     }
-    private static async Task<IResult> CreateEmployee(EmployeeRequest request, ISender sender)
+    private static async Task<IResult> CreateEmployee(EmployeeRequest request, IEmployeeService employeeService)
     {
-        var result = await sender.Send(new CreateEmployeeCommand(request));
+        var result = await employeeService.CreateAsync(request);
         return result.Match(x => Results.Created(
             $"/api/employee/{result.Value!.Id}", result.Value!), 
-            err => Results.BadRequest(err.ToProblemDetails($"/api/employee/{result.Value!.Id}", "Failed to create employee"))
+            err => Results.BadRequest(err.ToProblemDetails($"/api/employee", "Failed to create employee"))
         );
     }
     
-    private static async Task<IResult> UpdateEmployee(Guid id, EmployeeRequest request, ISender sender)
+    private static async Task<IResult> UpdateEmployee(Guid id, EmployeeRequest request, IEmployeeService employeeService)
     {
-        var result = await sender.Send(new UpdateEmployeeCommand(id, request));
+        var result = await employeeService.UpdateAsync(id, request);
         return result.Match(Results.Ok, err => Results.BadRequest(err.ToProblemDetails($"api/employee/{id}", "Failed to update employee")));
     }
     
-    private static async Task<IResult> DeleteEmployee(Guid id, ISender sender)
+    private static async Task<IResult> DeleteEmployee(Guid id, IEmployeeService employeeService)
     {
-        var result = await sender.Send(new DeleteEmployeeCommand(id));
+        var result = await employeeService.DeleteAsync(id);
         return result.Match(_ => Results.NoContent(), err => Results.BadRequest(err.ToProblemDetails($"api/employee/{id}", "Failed to delete employee")));
     }
 }

@@ -1,4 +1,6 @@
-﻿using Microsoft.Extensions.Caching.Hybrid;
+﻿using Application.Abstraction.Service;
+using Application.Service;
+using Microsoft.Extensions.Caching.Hybrid;
 
 namespace Application;
 
@@ -23,7 +25,9 @@ public static class DependencyInjection
                 LocalCacheExpiration = TimeSpan.FromMinutes(1),
                 Expiration = TimeSpan.FromMinutes(5),
             };
-        });  
+        });
+
+        services.AddScoped<IEmployeeService, EmployeeService>();
 
         return services;
     }
