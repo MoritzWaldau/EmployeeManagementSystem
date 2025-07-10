@@ -15,36 +15,8 @@ permissions:
   contents: read
         
 jobs:
-  prepare:
+  build-and-release:
     runs-on: ubuntu-latest
-    permissions:
-      contents: write
-
-    steps:
-      - name: Checkout repo
-        uses: actions/checkout@v4
-
-      - name: Update value in appsettings.json
-        run: |
-          cat ./src/API/appsettings.json
-          
-          sed -i 's/"Version": "[^"]*"/"Version": "${{ github.event.inputs.version }}"/' ./src/API/appsettings.json
-
-          echo "Nach der Änderung:"
-          cat ./src/API/appsettings.json
-        
-      - name: Commit changes
-        run: |
-          git config --global user.name 'github-actions'
-          git config --global user.email 'github-actions@users.noreply.github.com'
-          git add .
-          git diff --cached --quiet || git commit -m "Auto format C# code"
-          git push
-
-  
-  release:
-    runs-on: ubuntu-latest
-    needs: prepare
     env:
       AZURE_CLIENT_ID: ${{ vars.AZURE_CLIENT_ID }}
       AZURE_TENANT_ID: ${{ vars.AZURE_TENANT_ID }}
@@ -82,9 +54,9 @@ jobs:
         env:
           AZURE_POSTGRES_PASSWORD: ${{ secrets.AZURE_POSTGRES_PASSWORD }}
 
-  create_release_tag:
+  create-release-tag:
     runs-on: ubuntu-latest
-    needs: release
+    needs: build-and-release
     permissions:
       contents: write
 
