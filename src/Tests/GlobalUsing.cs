@@ -1,0 +1,11 @@
+global using API.Endpoints;
+global using Application.Abstraction;
+global using Application.Models.Employee;
+global using Domain.Entities;
+global using Infrastructure.Repositories;
+global using NetArchTest.Rules;
+global using Newtonsoft.Json;
+global using Shouldly;
+global using System.Net.Http.Headers;
+global using System.Reflection;
+global using Tests.Configuration;

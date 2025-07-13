@@ -39,18 +39,18 @@ public sealed class EmployeeEndpoint : ICarterModule
             .Produces(StatusCodes.Status400BadRequest);
     }
     
-    private static async Task<IResult> GetAllEmployees([AsParameters] PaginationRequest request, IEmployeeService employeeService)
+    private static async Task<IResult> GetAllEmployees([AsParameters] PaginationRequest request, [FromServices] IEmployeeService employeeService)
     {
         var result = await employeeService.GetAllAsync(request);
         return result.Match(Results.Ok, err => Results.BadRequest(err.ToProblemDetails("api/employee", "Failed to get all employees")));
     }
 
-    private static async Task<IResult> GetEmployeeById(Guid id, IEmployeeService employeeService)
+    private static async Task<IResult> GetEmployeeById(Guid id, [FromServices] IEmployeeService employeeService)
     {
         var result = await employeeService.GetByIdAsync(id);
         return result.Match(Results.Ok, err => Results.BadRequest(err.ToProblemDetails($"api/employee/{id}", "Failed to get employee by id")));
     }
-    private static async Task<IResult> CreateEmployee(EmployeeRequest request, IEmployeeService employeeService)
+    private static async Task<IResult> CreateEmployee(EmployeeRequest request, [FromServices] IEmployeeService employeeService)
     {
         var result = await employeeService.CreateAsync(request);
         return result.Match(x => Results.Created(
@@ -59,13 +59,13 @@ public sealed class EmployeeEndpoint : ICarterModule
         );
     }
     
-    private static async Task<IResult> UpdateEmployee(Guid id, EmployeeRequest request, IEmployeeService employeeService)
+    private static async Task<IResult> UpdateEmployee(Guid id, EmployeeRequest request, [FromServices] IEmployeeService employeeService)
     {
         var result = await employeeService.UpdateAsync(id, request);
         return result.Match(Results.Ok, err => Results.BadRequest(err.ToProblemDetails($"api/employee/{id}", "Failed to update employee")));
     }
     
-    private static async Task<IResult> DeleteEmployee(Guid id, IEmployeeService employeeService)
+    private static async Task<IResult> DeleteEmployee(Guid id, [FromServices] IEmployeeService employeeService)
     {
         var result = await employeeService.DeleteAsync(id);
         return result.Match(_ => Results.NoContent(), err => Results.BadRequest(err.ToProblemDetails($"api/employee/{id}", "Failed to delete employee")));

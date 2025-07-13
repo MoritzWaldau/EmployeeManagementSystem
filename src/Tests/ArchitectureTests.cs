@@ -1,11 +1,3 @@
-﻿using System.Reflection;
-using API.Endpoints;
-using Application.Abstraction;
-using Domain.Entities;
-using Infrastructure.Repositories;
-using NetArchTest.Rules;
-using Shouldly;
-
 namespace Tests;
 
 public class ArchitectureTests

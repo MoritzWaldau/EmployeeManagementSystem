@@ -7,7 +7,7 @@ public class DatabaseFaker
     private readonly Faker<Payroll> _payrollFaker;
     private readonly Faker<Attendance> _attendanceFaker;
 
-    public DatabaseFaker()
+    private DatabaseFaker()
     {
         _payrollFaker = new Faker<Payroll>()
             .RuleFor(x => x.GrossSalary, f => f.Finance.Random.Double(5_000, 10_000))
@@ -39,7 +39,6 @@ public class DatabaseFaker
     
     public static List<Employee> GenerateSampleData(int count)
     {
-
         var employees = Instance._employeeFaker.Generate(count);
 
         foreach (var employee in employees)
@@ -85,6 +84,17 @@ public class DatabaseFaker
             nameof(Employee) => (T)(object)GenerateTestEmployee(),
             nameof(Payroll) => (T)(object)GenerateTestPayroll(),
             nameof(Attendance) => (T)(object)GenerateTestAttendance(),
+            _ => throw new InvalidOperationException($"No faker defined for type {typeof(T).Name}")
+        };
+    }
+    
+    public static Faker<T> GetFaker<T>() where T : Entity
+    {
+        return typeof(T).Name switch
+        {
+            nameof(Employee) => (Faker<T>)(object)Instance._employeeFaker,
+            nameof(Payroll) => (Faker<T>)(object)Instance._payrollFaker,
+            nameof(Attendance) => (Faker<T>)(object)Instance._attendanceFaker,
             _ => throw new InvalidOperationException($"No faker defined for type {typeof(T).Name}")
         };
     }

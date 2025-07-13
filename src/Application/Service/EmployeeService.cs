@@ -98,6 +98,7 @@ public sealed class EmployeeService(
         entity.FirstName = request.FirstName ?? entity.FirstName;
         entity.LastName = request.LastName ?? entity.LastName;
         entity.Email = request.Email ?? entity.Email;
+        entity.IsActive = request.IsActive ?? entity.IsActive;
         
         var updateResult = await unitOfWork.Employees.UpdateAsync(entity, cancellationToken);
         
