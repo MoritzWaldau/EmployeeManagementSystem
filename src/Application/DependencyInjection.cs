@@ -28,6 +28,8 @@ public static class DependencyInjection
         });
 
         services.AddScoped<IEmployeeService, EmployeeService>();
+        services.AddScoped<IAttendanceService, AttendanceService>();
+        services.AddScoped<IPayrollService, PayrollService>();
 
         return services;
     }
