@@ -41,8 +41,7 @@ public abstract class BaseTests(AspireAppFixture fixture)
             JsonConvert.SerializeObject(attendanceRequest), MediaTypeHeaderValue.Parse("application/json"));
 
         var attendanceResponse = await fixture.ApiClient.PostAsync(TestConfiguration.Attendance.Create, attendanceContent);
-
-
+        
         jsonString = await attendanceResponse.Content.ReadAsStringAsync();
         var attendance = JsonConvert.DeserializeObject<AttendanceResponse>(jsonString);
 

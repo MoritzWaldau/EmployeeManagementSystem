@@ -7,7 +7,6 @@ namespace Application.Service;
 public sealed class PayrollService(
     IUnitOfWork unitOfWork, 
     IMapper mapper,
-    IValidator<PayrollRequest> validator,
     HybridCache cache) 
     : IPayrollService
 {
