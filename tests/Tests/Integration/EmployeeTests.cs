@@ -1,16 +1,27 @@
+using Application.Models.Pagination;
+using Application.Pattern;
+
 namespace Tests.Integration;
 
 [Collection("AspireApp")]
-public class EmployeeTests(AspireAppFixture fixture)
+public class EmployeeTests(AspireAppFixture fixture) : BaseTests(fixture)
 {
     [Fact]
     public async Task ApiShouldReturnEmployees()
     {
+        //Arrange
+        var employeeId = await CreateEmployeeWithData();
+
         // Act
         var response = await fixture.ApiClient.GetAsync(TestConfiguration.Employee.GetAll);
         
         // Assert
         Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+        var jsonString = await response.Content.ReadAsStringAsync();
+        var paginationResponse = JsonConvert.DeserializeObject<PaginationResponse<EmployeeResponse>>(jsonString);
+        Assert.NotNull(paginationResponse);
+        Assert.NotEmpty(paginationResponse.Items);
+        Assert.Contains(paginationResponse.Items, e => e.Id == employeeId);
     }
     
     [Fact]

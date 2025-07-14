@@ -38,9 +38,6 @@ public sealed class AspireAppFixture :IAsyncLifetime
         ApiClient = _app.CreateHttpClient("api");
         await _app.ResourceNotifications.WaitForResourceHealthyAsync("api", cancellationToken)
             .WaitAsync(DefaultTimeout, cancellationToken);
-
-        var response = ApiClient.GetAsync($"api/data/2", cancellationToken);
-        await response.WaitAsync(DefaultTimeout, cancellationToken);
     }
 
     public async Task DisposeAsync()
