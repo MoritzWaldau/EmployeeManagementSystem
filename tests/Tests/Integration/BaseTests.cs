@@ -12,7 +12,7 @@ namespace Tests.Integration;
 
 public abstract class BaseTests(AspireAppFixture fixture)
 {
-    protected async Task<Guid> CreateEmployeeWithData()
+    protected async Task<EmployeeResponse> CreateEmployeeWithData()
     {
         var httpContent = new StringContent(
         JsonConvert.SerializeObject(new EmployeeRequest
@@ -43,7 +43,7 @@ public abstract class BaseTests(AspireAppFixture fixture)
         var attendanceResponse = await fixture.ApiClient.PostAsync(TestConfiguration.Attendance.Create, attendanceContent);
         
         jsonString = await attendanceResponse.Content.ReadAsStringAsync();
-        var attendance = JsonConvert.DeserializeObject<AttendanceResponse>(jsonString);
+        var attendance = JsonConvert.DeserializeObject<AttendanceResponse>(jsonString) ?? throw new InvalidOperationException("Failed to deserialize attendance.");
 
         var payrollRequest = new PayrollRequest
         {
@@ -60,8 +60,18 @@ public abstract class BaseTests(AspireAppFixture fixture)
         var payrollResponse = await fixture.ApiClient.PostAsync(TestConfiguration.Payroll.Create, payrollContent);
 
         jsonString = await payrollResponse.Content.ReadAsStringAsync();
-        var payroll = JsonConvert.DeserializeObject<PayrollResponse>(jsonString);
+        var payroll = JsonConvert.DeserializeObject<PayrollResponse>(jsonString) ?? throw new InvalidOperationException("Failed to create payroll.");
 
-        return employee.Id;
+
+        return new EmployeeResponse
+        {
+            Id = employee.Id,
+            FirstName = employee.FirstName,
+            LastName = employee.LastName,
+            Email = employee.Email,
+            IsActive = employee.IsActive,
+            Attendances = new List<AttendanceResponse> { attendance },
+            Payrolls = new List<PayrollResponse> { payroll }
+        };
     }
 }

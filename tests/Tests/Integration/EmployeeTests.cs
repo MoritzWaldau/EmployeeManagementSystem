@@ -11,7 +11,7 @@ public class EmployeeTests(AspireAppFixture fixture) : BaseTests(fixture)
     public async Task ApiShouldReturnEmployees()
     {
         //Arrange
-        var employeeId = await CreateEmployeeWithData();
+        var employee = await CreateEmployeeWithData();
 
         // Act
         var response = await _fixture.ApiClient.GetAsync(TestConfiguration.Employee.GetAll);
@@ -22,7 +22,7 @@ public class EmployeeTests(AspireAppFixture fixture) : BaseTests(fixture)
         var paginationResponse = JsonConvert.DeserializeObject<PaginationResponse<EmployeeResponse>>(jsonString);
         Assert.NotNull(paginationResponse);
         Assert.NotEmpty(paginationResponse.Items);
-        Assert.Contains(paginationResponse.Items, e => e.Id == employeeId);
+        Assert.Contains(paginationResponse.Items, e => e.Id == employee.Id);
     }
     
     [Fact]
@@ -49,7 +49,7 @@ public class EmployeeTests(AspireAppFixture fixture) : BaseTests(fixture)
     public async Task ApiShouldReturnEmployeeById()
     {
         // Arrange
-        var employee = await CreateEmployee();
+        var employee = await CreateEmployeeWithData();
         
         // Act
         var response = await _fixture.ApiClient.GetAsync(string.Format(TestConfiguration.Employee.GetById, employee.Id));
@@ -62,11 +62,14 @@ public class EmployeeTests(AspireAppFixture fixture) : BaseTests(fixture)
     public async Task ApiShouldUpdateEmployee()
     {
         // Arrange
-        var employee = await CreateEmployee();
+        var employee = await CreateEmployeeWithData();
         
         var httpContent = new StringContent(
         JsonConvert.SerializeObject(new EmployeeRequest
         {
+            FirstName = "Updated " + employee.FirstName ,
+            LastName = "Updated " + employee.LastName,
+            Email = "Updated " + employee.Email,
             IsActive = false,
         }), MediaTypeHeaderValue.Parse("application/json"));
         
@@ -78,6 +81,9 @@ public class EmployeeTests(AspireAppFixture fixture) : BaseTests(fixture)
         // Assert
         Assert.Equal(HttpStatusCode.OK, response.StatusCode);
         Assert.NotNull(updatedEmployee);
+        Assert.Equal("Updated " + employee.FirstName, updatedEmployee.FirstName);
+        Assert.Equal("Updated " + employee.LastName, updatedEmployee.LastName);
+        Assert.Equal("Updated " + employee.Email, updatedEmployee.Email);
         Assert.False(updatedEmployee.IsActive);
     }
     
@@ -85,7 +91,7 @@ public class EmployeeTests(AspireAppFixture fixture) : BaseTests(fixture)
     public async Task ApiShouldDeleteEmployee()
     {
         // Arrange
-        var employee = await CreateEmployee();
+        var employee = await CreateEmployeeWithData();
         
         // Act
         var response = await _fixture.ApiClient.DeleteAsync(string.Format(TestConfiguration.Employee.Delete, employee.Id));
@@ -96,24 +102,5 @@ public class EmployeeTests(AspireAppFixture fixture) : BaseTests(fixture)
         // Verify that the employee was deleted
         var getResponse = await _fixture.ApiClient.GetAsync(string.Format(TestConfiguration.Employee.GetById, employee.Id));
         Assert.Equal(HttpStatusCode.BadRequest, getResponse.StatusCode);
-    }
-
-    private async Task<EmployeeResponse> CreateEmployee()
-    {
-        var httpContent = new StringContent(
-            JsonConvert.SerializeObject(new EmployeeRequest
-            {
-                FirstName = "Moritz",
-                LastName = "Waldau",
-                Email = $"{Guid.CreateVersion7()}@reply.de",
-                IsActive = true,
-            }), MediaTypeHeaderValue.Parse("application/json"));
-        
-        var res = await _fixture.ApiClient.PostAsync(TestConfiguration.Employee.Create, httpContent);
-        
-        var jsonString = await res.Content.ReadAsStringAsync();
-        var employee = JsonConvert.DeserializeObject<EmployeeResponse>(jsonString);
-        
-        return employee ?? throw new InvalidOperationException("Failed to create employee.");
     }
 }

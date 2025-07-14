@@ -14,6 +14,6 @@ public sealed record PayrollResponse : BaseResponse
     [JsonPropertyName("grossSalary")]
     public required double GrossSalary { get; set; }
     
-    [JsonPropertyName("deductions")]
+    [JsonPropertyName("netSalary")]
     public required double NetSalary { get; set; }
 }
