@@ -2,11 +2,10 @@ namespace Application.Validator.Attendance;
 
 public sealed class CreateAttendanceValidator : AbstractValidator<AttendanceRequest>
 {
-    private readonly IUnitOfWork _unitOfWork;
+    
     public CreateAttendanceValidator(IServiceProvider serviceProvider)
     {
-        _unitOfWork = serviceProvider.GetRequiredService<IUnitOfWork>();
-
+        
         
         RuleFor(x => x.Date)
             .NotEmpty().WithMessage("Please enter a date from the attendance date");

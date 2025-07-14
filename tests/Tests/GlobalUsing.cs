@@ -1,6 +1,6 @@
 global using AutoMapper;
 global using API.Endpoints;
-global using Application.Abstraction;
+global using Application.Abstraction.Repository;
 global using Application.Mapping;
 global using Application.Models.Attendance;
 global using Application.Models.Employee;
@@ -15,6 +15,9 @@ global using Shouldly;
 global using System.Net.Http.Headers;
 global using System.Reflection;
 global using Tests.Configuration;
+global using Aspire.Hosting;
+global using Microsoft.Extensions.Logging;
+global using Application.Models.Pagination;
 
 
 

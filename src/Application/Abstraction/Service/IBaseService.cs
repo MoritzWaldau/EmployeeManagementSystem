@@ -2,7 +2,7 @@ using Application.Models;
 
 namespace Application.Abstraction.Service;
 
-public interface IBaseService<TRequest, TResponse> where TResponse : BaseResponse
+public interface IBaseService<in TRequest, TResponse> where TResponse : BaseResponse
 {
     Task<Result<PaginationResponse<TResponse>>> GetAllAsync(PaginationRequest paginationRequest, CancellationToken cancellationToken = default);
     Task<Result<TResponse>> GetByIdAsync(Guid id, CancellationToken cancellationToken = default);

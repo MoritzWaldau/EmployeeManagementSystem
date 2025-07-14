@@ -1,6 +1,4 @@
-﻿using Application.Models.Attendance;
-
-namespace Application.Models.Employee;
+﻿namespace Application.Models.Employee;
 
 public sealed record EmployeeResponse : BaseResponse
 {

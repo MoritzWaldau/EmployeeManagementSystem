@@ -1,12 +1,10 @@
-﻿global using Application.Abstraction;
+﻿global using Application.Abstraction.Repository;
 global using Application.Pattern;
 global using Bogus;
 global using Domain.Abstraction;
 global using Domain.Entities;
 global using Domain.Enums;
-global using Domain.Exceptions;
 global using Infrastructure.Database;
 global using Infrastructure.Repositories;
 global using Microsoft.EntityFrameworkCore;
-global using Microsoft.Extensions.Configuration;
 global using Microsoft.Extensions.DependencyInjection;

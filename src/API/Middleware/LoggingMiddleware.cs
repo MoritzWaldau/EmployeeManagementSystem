@@ -1,6 +1,3 @@
-using System.Diagnostics;
-using Serilog.Events;
-
 namespace API.Middleware;
 
 public class LoggingMiddleware : IMiddleware

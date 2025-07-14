@@ -1,5 +1,3 @@
-using Infrastructure.Database;
-
 var builder = WebApplication.CreateBuilder(args);
 
 builder.AddServiceDefaults()

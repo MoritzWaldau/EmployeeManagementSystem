@@ -1,5 +1,3 @@
-using Application.Models.Attendance;
-
 namespace Application.Mapping;
 
 public class AttendanceProfile : Profile

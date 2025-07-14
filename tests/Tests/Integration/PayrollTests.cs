@@ -1,5 +1,3 @@
-using Application.Models.Pagination;
-
 namespace Tests.Integration;
 
 [Collection("AspireApp")]

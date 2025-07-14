@@ -1,7 +1,4 @@
-﻿using Application.Models.Attendance;
-using Application.Models.Pagination;
-
-namespace Tests.Integration;
+﻿namespace Tests.Integration;
 
 [Collection("AspireApp")]
 public class AttendanceTests(AspireAppFixture fixture) : BaseTests(fixture)

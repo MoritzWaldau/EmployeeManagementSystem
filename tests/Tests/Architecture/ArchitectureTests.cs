@@ -3,7 +3,7 @@ namespace Tests.Architecture;
 public class ArchitectureTests
 {
     private static readonly Assembly DomainAssembly = typeof(Employee).Assembly;
-    private static readonly Assembly ApplicationAssembly = typeof(IEmployeeRepository<>).Assembly;
+    private static readonly Assembly ApplicationAssembly = typeof(IEmployeeRepository).Assembly;
     private static readonly Assembly InfrastructureAssembly = typeof(EmployeeRepository).Assembly;
     private static readonly Assembly PresentationAssembly = typeof(EmployeeEndpoint).Assembly; 
     

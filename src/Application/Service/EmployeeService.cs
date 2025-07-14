@@ -1,9 +1,7 @@
-using Application.Abstraction.Service;
-
 namespace Application.Service;
 
 public sealed class EmployeeService(
-    IUnitOfWork unitOfWork, 
+    IEmployeeRepository employeeRepository, 
     IMapper mapper,
     IValidator<EmployeeRequest> validator,
     HybridCache cache) 
@@ -16,9 +14,9 @@ public sealed class EmployeeService(
             $"{CacheKeys.EmployeeKey}{paginationRequest.PageIndex}{paginationRequest.PageSize}",
             async ct =>
             {
-                var totalEmployees = await unitOfWork.Employees.CountAsync(ct);
+                var totalEmployees = await employeeRepository.CountAsync(ct);
                 var totalPages = (int)Math.Ceiling((double)totalEmployees / paginationRequest.PageSize);
-                var result = await unitOfWork.Employees.GetAllAsync(paginationRequest.PageIndex, paginationRequest.PageSize, ct);
+                var result = await employeeRepository.GetAllAsync(paginationRequest.PageIndex, paginationRequest.PageSize, ct);
                 
                 if (!result.IsSuccess || !result.HasValue)
                 {
@@ -49,7 +47,7 @@ public sealed class EmployeeService(
         var errorMessage = "";
         var mappedEntity = await cache.GetOrCreateAsync($"{CacheKeys.EmployeeKey}{id}", async ct =>
         {
-            var resultFromDb = await unitOfWork.Employees.GetByIdAsync(id, ct);
+            var resultFromDb = await employeeRepository.GetByIdAsync(id, ct);
             if (resultFromDb is { IsSuccess: true, HasValue: true })
                 return mapper.Map<EmployeeResponse>(resultFromDb.Value);
         
@@ -73,7 +71,7 @@ public sealed class EmployeeService(
         }
         
         var employee = mapper.Map<Domain.Entities.Employee>(request);
-        var result = await unitOfWork.Employees.CreateAsync(employee, cancellationToken);
+        var result = await employeeRepository.CreateAsync(employee, cancellationToken);
         if (!result.IsSuccess)
         {
             return Result<EmployeeResponse>.Failure(result.ErrorMessage);
@@ -86,7 +84,7 @@ public sealed class EmployeeService(
 
     public async Task<Result<EmployeeResponse>> UpdateAsync(Guid id, EmployeeRequest request, CancellationToken cancellationToken = default)
     {
-        var result = await unitOfWork.Employees.GetByIdAsync(id, cancellationToken);
+        var result = await employeeRepository.GetByIdAsync(id, cancellationToken);
         
         if(!result.IsSuccess) 
         {
@@ -100,7 +98,7 @@ public sealed class EmployeeService(
         entity.Email = request.Email ?? entity.Email;
         entity.IsActive = request.IsActive ?? entity.IsActive;
         
-        var updateResult = await unitOfWork.Employees.UpdateAsync(entity, cancellationToken);
+        var updateResult = await employeeRepository.UpdateAsync(entity, cancellationToken);
         
         if (!updateResult.IsSuccess)
         {
@@ -114,7 +112,7 @@ public sealed class EmployeeService(
 
     public async Task<Result<EmployeeResponse>> DeleteAsync(Guid id, CancellationToken cancellationToken = default)
     {
-        var result = await unitOfWork.Employees.DeleteAsync(id, cancellationToken);
+        var result = await employeeRepository.DeleteAsync(id, cancellationToken);
         
         if (!result.IsSuccess) return Result<EmployeeResponse>.Failure(result.ErrorMessage);
         

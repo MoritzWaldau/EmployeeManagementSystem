@@ -1,6 +1,4 @@
-﻿
-
-namespace Application.Abstraction;
+﻿namespace Application.Abstraction.Repository;
 
 public interface IBaseRepository<TEntity> where TEntity : IEntity
 {

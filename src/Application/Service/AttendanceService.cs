@@ -1,9 +1,7 @@
-using Application.Abstraction.Service;
-
 namespace Application.Service;
 
 public sealed class AttendanceService(
-    IUnitOfWork unitOfWork, 
+    IAttendanceRepository attendanceRepository, 
     IMapper mapper,
     IValidator<AttendanceRequest> validator,
     HybridCache cache)
@@ -17,9 +15,9 @@ public sealed class AttendanceService(
             $"{CacheKeys.AttendanceKey}{paginationRequest.PageIndex}{paginationRequest.PageSize}",
             async ct =>
             {
-                var totalAttendances = await unitOfWork.Attendances.CountAsync(ct);
+                var totalAttendances = await attendanceRepository.CountAsync(ct);
                 var totalPages = (int)Math.Ceiling((double)totalAttendances / paginationRequest.PageSize);
-                var result = await unitOfWork.Attendances.GetAllAsync(paginationRequest.PageIndex, paginationRequest.PageSize, ct);
+                var result = await attendanceRepository.GetAllAsync(paginationRequest.PageIndex, paginationRequest.PageSize, ct);
                 
                 if (!result.IsSuccess || !result.HasValue)
                 {
@@ -49,7 +47,7 @@ public sealed class AttendanceService(
         var errorMessage = "";
         var mappedAttendance = await cache.GetOrCreateAsync($"{CacheKeys.AttendanceKey}{id}", async ct =>
             {
-                var resultFromDb = await unitOfWork.Attendances.GetByIdAsync(id, ct);
+                var resultFromDb = await attendanceRepository.GetByIdAsync(id, ct);
                 if (resultFromDb is { IsSuccess: true, HasValue: true })
                     return mapper.Map<AttendanceResponse>(resultFromDb.Value);
             
@@ -73,7 +71,7 @@ public sealed class AttendanceService(
         }
         
         var attendance = mapper.Map<Domain.Entities.Attendance>(request);
-        var result = await unitOfWork.Attendances.CreateAsync(attendance, cancellationToken);
+        var result = await attendanceRepository.CreateAsync(attendance, cancellationToken);
         if (!result.IsSuccess)
         {
             return Result<AttendanceResponse>.Failure(result.ErrorMessage);
@@ -86,7 +84,7 @@ public sealed class AttendanceService(
 
     public async Task<Result<AttendanceResponse>> UpdateAsync(Guid id, AttendanceRequest request, CancellationToken cancellationToken = default)
     {
-        var result = await unitOfWork.Attendances.GetByIdAsync(id, cancellationToken);
+        var result = await attendanceRepository.GetByIdAsync(id, cancellationToken);
         
         if(!result.IsSuccess || !result.HasValue) 
         {
@@ -100,7 +98,7 @@ public sealed class AttendanceService(
         entity.CheckInTime = request.CheckInTime ?? entity.CheckInTime;
         entity.CheckOutTime = request.CheckOutTime ?? entity.CheckOutTime;
         
-        var updatedResult = await unitOfWork.Attendances.UpdateAsync(entity, cancellationToken);
+        var updatedResult = await attendanceRepository.UpdateAsync(entity, cancellationToken);
         if (!updatedResult.IsSuccess)
         {
             return Result<AttendanceResponse>.Failure(updatedResult.ErrorMessage);
@@ -112,7 +110,7 @@ public sealed class AttendanceService(
 
     public async Task<Result<AttendanceResponse>> DeleteAsync(Guid id, CancellationToken cancellationToken = default)
     {
-        var result = await unitOfWork.Attendances.DeleteAsync(id, cancellationToken);
+        var result = await attendanceRepository.DeleteAsync(id, cancellationToken);
 
         if (!result.IsSuccess) return Result<AttendanceResponse>.Failure(result.ErrorMessage);
 

@@ -1,7 +1,7 @@
 ﻿namespace Infrastructure.Repositories;
 
 public sealed class EmployeeRepository(DatabaseContext context) : 
-    BaseRepository<Employee>(context), IEmployeeRepository<Employee>
+    BaseRepository<Employee>(context), IEmployeeRepository
 {
     private readonly DatabaseContext _context = context;
 

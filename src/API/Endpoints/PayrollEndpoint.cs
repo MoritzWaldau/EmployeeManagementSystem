@@ -1,6 +1,4 @@
-﻿using API.Extensions;
-
-namespace API.Endpoints;
+﻿namespace API.Endpoints;
 
 public sealed class PayrollEndpoint : ICarterModule
 {

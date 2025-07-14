@@ -1,6 +1,3 @@
-using Aspire.Hosting;
-using Microsoft.Extensions.Logging;
-
 namespace Tests.Configuration;
 
 [CollectionDefinition("AspireApp")]

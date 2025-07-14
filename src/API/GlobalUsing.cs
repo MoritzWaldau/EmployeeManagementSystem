@@ -15,3 +15,7 @@ global using Microsoft.EntityFrameworkCore;
 global using Microsoft.OpenApi.Models;
 global using Serilog;
 global using System.Text.Json.Serialization;
+global using Domain.Entities;
+global using Infrastructure.Database;
+global using System.Diagnostics;
+global using Serilog.Events;

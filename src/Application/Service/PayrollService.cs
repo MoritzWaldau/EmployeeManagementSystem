@@ -1,11 +1,9 @@
-using Application.Abstraction.Service;
-
 namespace Application.Service;
 
 //TODO: Create validator for PayrollRequest
 
 public sealed class PayrollService(
-    IUnitOfWork unitOfWork, 
+    IPayrollRepository payrollRepository, 
     IMapper mapper,
     HybridCache cache) 
     : IPayrollService
@@ -17,9 +15,9 @@ public sealed class PayrollService(
             $"{CacheKeys.PayrollKey}{paginationRequest.PageIndex}{paginationRequest.PageSize}",
             async ct =>
             {
-                var totalPayrolls = await unitOfWork.Payrolls.CountAsync(ct);
+                var totalPayrolls = await payrollRepository.CountAsync(ct);
                 var totalPages = (int)Math.Ceiling((double)totalPayrolls / paginationRequest.PageSize);
-                var result = await unitOfWork.Payrolls.GetAllAsync(paginationRequest.PageIndex, paginationRequest.PageSize, ct);
+                var result = await payrollRepository.GetAllAsync(paginationRequest.PageIndex, paginationRequest.PageSize, ct);
                 
                 if (!result.IsSuccess || !result.HasValue)
                 {
@@ -51,7 +49,7 @@ public sealed class PayrollService(
         var errorMessage = "";
         var mappedEntity = await cache.GetOrCreateAsync($"{CacheKeys.PayrollKey}{id}", async ct =>
         {
-            var resultFromDb = await unitOfWork.Payrolls.GetByIdAsync(id, ct);
+            var resultFromDb = await payrollRepository.GetByIdAsync(id, ct);
             if (resultFromDb is { IsSuccess: true, HasValue: true })
                 return mapper.Map<PayrollResponse>(resultFromDb.Value);
 
@@ -67,7 +65,7 @@ public sealed class PayrollService(
     public async Task<Result<PayrollResponse>> CreateAsync(PayrollRequest request, CancellationToken cancellationToken = default)
     {
         var entity = mapper.Map<Domain.Entities.Payroll>(request);
-        var result = await unitOfWork.Payrolls.CreateAsync(entity, cancellationToken);
+        var result = await payrollRepository.CreateAsync(entity, cancellationToken);
         if (!result.IsSuccess)
         {
             return Result<PayrollResponse>.Failure(result.ErrorMessage);
@@ -79,7 +77,7 @@ public sealed class PayrollService(
 
     public async Task<Result<PayrollResponse>> UpdateAsync(Guid id, PayrollRequest request, CancellationToken cancellationToken = default)
     {
-        var result = await unitOfWork.Payrolls.GetByIdAsync(id, cancellationToken);
+        var result = await payrollRepository.GetByIdAsync(id, cancellationToken);
         
         if (!result.IsSuccess)
         {
@@ -94,7 +92,7 @@ public sealed class PayrollService(
         entity.GrossSalary = request.GrossSalary ?? entity.GrossSalary;
         entity.NetSalary = request.NetSalary ?? entity.NetSalary;
         
-        var updateResult = await unitOfWork.Payrolls.UpdateAsync(entity, cancellationToken);
+        var updateResult = await payrollRepository.UpdateAsync(entity, cancellationToken);
 
         if (!updateResult.IsSuccess)
         {
@@ -108,7 +106,7 @@ public sealed class PayrollService(
 
     public async Task<Result<PayrollResponse>> DeleteAsync(Guid id, CancellationToken cancellationToken = default)
     {
-        var result = await unitOfWork.Payrolls.DeleteAsync(id, cancellationToken);
+        var result = await payrollRepository.DeleteAsync(id, cancellationToken);
 
         if (!result.IsSuccess) return Result<PayrollResponse>.Failure(result.ErrorMessage);
 

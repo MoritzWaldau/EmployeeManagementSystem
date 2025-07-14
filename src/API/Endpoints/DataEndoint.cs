@@ -1,8 +1,4 @@
-﻿
-using Domain.Entities;
-using Infrastructure.Database;
-
-namespace API.Endpoints
+﻿namespace API.Endpoints
 {
     public sealed class DataEndoint : ICarterModule
     {

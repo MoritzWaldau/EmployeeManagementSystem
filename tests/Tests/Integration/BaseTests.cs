@@ -1,14 +1,4 @@
-﻿using Application.Models.Attendance;
-using Application.Models.Payroll;
-using Domain.Enums;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using static Google.Protobuf.Compiler.CodeGeneratorResponse.Types;
-
-namespace Tests.Integration;
+﻿namespace Tests.Integration;
 
 public abstract class BaseTests(AspireAppFixture fixture)
 {

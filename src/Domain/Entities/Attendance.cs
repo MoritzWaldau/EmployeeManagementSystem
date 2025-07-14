@@ -1,5 +1,3 @@
-using System.ComponentModel;
-
 namespace Domain.Entities;
 
 public sealed class Attendance : Entity
