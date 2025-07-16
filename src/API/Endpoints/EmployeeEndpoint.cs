@@ -7,7 +7,7 @@ public sealed class EmployeeEndpoint : ICarterModule
         var group = app.MapGroup("api/employee");
         
         group.MapGet("/", GetAllEmployees)
-            .WithSummary("Get all employess")
+            .WithSummary("Get all employees")
             .WithName(nameof(GetAllEmployees))
             .Produces<PaginationResponse<EmployeeResponse>>()
             .Produces(StatusCodes.Status400BadRequest);

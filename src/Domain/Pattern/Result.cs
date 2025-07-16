@@ -1,4 +1,6 @@
-﻿namespace Application.Pattern;
+﻿using FluentValidation.Results;
+
+namespace Domain.Pattern;
 
 public class Result
 {

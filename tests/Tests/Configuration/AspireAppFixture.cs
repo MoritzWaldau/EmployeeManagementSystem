@@ -9,7 +9,7 @@ public sealed class AspireAppFixture :IAsyncLifetime
 {
     private static readonly TimeSpan DefaultTimeout = TimeSpan.FromSeconds(30);
     private IDistributedApplicationTestingBuilder? _appHost;
-    private DistributedApplication _app;
+    private DistributedApplication? _app;
 
     public HttpClient ApiClient { get; private set; } = null!;
     
@@ -39,6 +39,6 @@ public sealed class AspireAppFixture :IAsyncLifetime
 
     public async Task DisposeAsync()
     {
-        await _app.DisposeAsync();
+        await _app!.DisposeAsync();
     }
 }

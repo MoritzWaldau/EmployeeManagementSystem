@@ -1,5 +1,5 @@
 ﻿global using Application.Abstraction.Repository;
-global using Application.Pattern;
+global using Domain.Pattern;
 global using Bogus;
 global using Domain.Abstraction;
 global using Domain.Entities;

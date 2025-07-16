@@ -1,6 +1,5 @@
 ﻿global using API;
 global using API.Middleware;
-global using API.Extensions;
 global using Application;
 global using Application.Abstraction.Service;
 global using Application.Models.Attendance;
@@ -19,3 +18,5 @@ global using Domain.Entities;
 global using Infrastructure.Database;
 global using System.Diagnostics;
 global using Serilog.Events;
+global using Domain.Pattern;
+global using API.Extensions;
