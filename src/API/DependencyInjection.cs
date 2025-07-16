@@ -8,7 +8,7 @@ public static class DependencyInjection
         services.AddHealthChecks();
         services.AddEndpointsApiExplorer();
         services.AddExceptionHandler<ExceptionMiddleware>();
-        services.AddTransient<LoggingMiddleware>();
+        //services.AddTransient<LoggingMiddleware>();
         services.AddHttpContextAccessor();
         services.AddSwagger(configuration);
         services.ConfigureHttpJsonOptions(options =>
@@ -66,8 +66,8 @@ public static class DependencyInjection
     {
         app.MapCarter();
         app.UseHealthChecks("/health");
-        //app.UseSerilogRequestLogging();
-        app.UseMiddleware<LoggingMiddleware>();
+        app.UseSerilogRequestLogging();
+        //app.UseMiddleware<LoggingMiddleware>();
         app.UseExceptionHandler(x => { });
         app.UseHttpsRedirection();
 
