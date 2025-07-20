@@ -1,8 +1,8 @@
 ﻿namespace API.Endpoints
 {
-    public sealed class DataEndoint : ICarterModule
+    public static class DataEndpoint
     {
-        public void AddRoutes(IEndpointRouteBuilder app)
+        public static void MapDataEndpoints(this IEndpointRouteBuilder app)
         {
             var group = app.MapGroup("api/data");
 

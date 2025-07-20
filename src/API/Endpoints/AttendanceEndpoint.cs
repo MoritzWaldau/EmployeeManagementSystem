@@ -1,8 +1,8 @@
 namespace API.Endpoints;
 
-public sealed class AttendanceEndpoint : ICarterModule
+public static class AttendanceEndpoint
 {
-    public void AddRoutes(IEndpointRouteBuilder app)
+    public static void MapAttendanceEndpoints(this IEndpointRouteBuilder app)
     {
         var group = app.MapGroup("api/attendance");
         
@@ -12,7 +12,7 @@ public sealed class AttendanceEndpoint : ICarterModule
             .Produces<PaginationResponse<AttendanceResponse>>()
             .Produces(StatusCodes.Status400BadRequest);
         
-        group.MapGet("/{id}", GetAttendanceById)
+        group.MapGet("/{id:guid}", GetAttendanceById)
             .WithSummary("Get attendance by id")
             .WithName(nameof(GetAttendanceById))
             .Produces<AttendanceResponse>()
@@ -25,14 +25,14 @@ public sealed class AttendanceEndpoint : ICarterModule
             .Produces<EmployeeResponse>(StatusCodes.Status201Created)
             .Produces(StatusCodes.Status400BadRequest);
         
-        group.MapPut("/{id}", UpdateAttendance)
+        group.MapPut("/{id:guid}", UpdateAttendance)
             .WithSummary("Update attendance")
             .WithName(nameof(UpdateAttendance))
             .Accepts<AttendanceRequest>("application/json")
             .Produces<AttendanceResponse>()
             .Produces(StatusCodes.Status400BadRequest);
         
-        group.MapDelete("/{id}", DeleteAttendance)
+        group.MapDelete("/{id:guid}", DeleteAttendance)
             .WithSummary("Delete attendance")
             .WithName(nameof(DeleteAttendance))
             .Produces(StatusCodes.Status204NoContent)

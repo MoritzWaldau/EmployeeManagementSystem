@@ -1,10 +1,12 @@
-﻿namespace API;
+﻿using System.Text.Json;
+using API.Endpoints;
+
+namespace API;
 
 public static class DependencyInjection
 {
     public static IServiceCollection AddApiServices(this IServiceCollection services, IConfiguration configuration)
     {
-        services.AddCarter();
         services.AddHealthChecks();
         services.AddEndpointsApiExplorer();
         services.AddExceptionHandler<ExceptionMiddleware>();
@@ -15,6 +17,7 @@ public static class DependencyInjection
         {
             options.SerializerOptions.DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull;
             options.SerializerOptions.Converters.Add(new JsonStringEnumConverter());
+            options.SerializerOptions.PropertyNamingPolicy = JsonNamingPolicy.CamelCase;
         });
         services.AddProblemDetails();
         return services;
@@ -64,7 +67,10 @@ public static class DependencyInjection
     
     private static WebApplication UseServices(this WebApplication app)
     {
-        app.MapCarter();
+        app.MapEmployeeEndpoints();
+        app.MapAttendanceEndpoints();
+        app.MapPayrollEndpoints();
+        app.MapDataEndpoints();
         app.UseHealthChecks("/health");
         app.UseSerilogRequestLogging();
         //app.UseMiddleware<LoggingMiddleware>();
@@ -74,12 +80,10 @@ public static class DependencyInjection
         return app;
     }
 
-    private static WebApplication MapDatabase(this WebApplication app)
+    private static void MapDatabase(this WebApplication app)
     {
         using var scope = app.Services.CreateScope();
         var dbContext = scope.ServiceProvider.GetRequiredService<DatabaseContext>();
         dbContext.Database.Migrate();
-        
-        return app;
     }
 }

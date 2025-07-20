@@ -40,12 +40,12 @@ public class MapperTests : IDisposable
     {
         // Arrange
         var employeeRequest = new EmployeeRequest
-        {
-            FirstName = "John",
-            LastName = "Doe",
-            Email = "JohnDoe@reply.de",
-            IsActive = true
-        };
+        (
+            "John",
+            "Doe",
+            "JohnDoe@reply.de",
+            true
+        );
         
         // Act
         var employee = _mapper.Map<Employee>(employeeRequest);
@@ -85,13 +85,13 @@ public class MapperTests : IDisposable
     {
         // Arrange
         var attendanceRequest = new AttendanceRequest
-        {
-            EmployeeId = Guid.CreateVersion7(),
-            Date = DateOnly.Parse("2025-08-17"),
-            CheckInTime = new TimeSpan(08, 00 ,00),
-            CheckOutTime = new TimeSpan(17,30 ,00),
-            Status = Status.WorkTime
-        };
+        (
+            Guid.CreateVersion7(),
+            DateOnly.Parse("2025-08-17"),
+             new TimeSpan(08, 00 ,00),
+            new TimeSpan(17,30 ,00),
+            Status.WorkTime
+        );
         
         // Act
         var attendance = _mapper.Map<Attendance>(attendanceRequest);
@@ -132,13 +132,13 @@ public class MapperTests : IDisposable
     {
         // Arrange
         var payrollRequest = new PayrollRequest
-        {
-            EmployeeId = Guid.CreateVersion7(),
-            Month = Month.August,
-            Year = 2025,
-            GrossSalary = 9000,
-            NetSalary = 5678
-        };
+        (
+            Guid.CreateVersion7(),
+            2025,
+            Month.August,
+            9000,
+            5678
+        );
         
         // Act
         var payroll = _mapper.Map<Payroll>(payrollRequest);

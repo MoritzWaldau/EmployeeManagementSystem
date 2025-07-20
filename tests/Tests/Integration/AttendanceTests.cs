@@ -29,13 +29,13 @@ public class AttendanceTests(AspireAppFixture fixture) : BaseTests(fixture)
         var employee = await CreateEmployeeWithData();
         var httpContent = new StringContent(
             JsonConvert.SerializeObject(new AttendanceRequest
-            {
-                EmployeeId = employee.Id,
-                CheckInTime = new TimeSpan(12, 0, 0),
-                CheckOutTime = new TimeSpan(16, 0, 0),
-                Date = new DateOnly(2025, 08, 17),
-                Status = Status.WorkTime
-            }), MediaTypeHeaderValue.Parse("application/json"));
+            (
+                employee.Id,
+                new DateOnly(2025, 08, 17),
+                new TimeSpan(12, 0, 0),
+                new TimeSpan(16, 0, 0),
+                Status.WorkTime
+            )), MediaTypeHeaderValue.Parse("application/json"));
         
         // Act
         var response = await _fixture.ApiClient.PostAsync(TestConfiguration.Attendance.Create, httpContent);
@@ -67,10 +67,13 @@ public class AttendanceTests(AspireAppFixture fixture) : BaseTests(fixture)
         
         var httpContent = new StringContent(
             JsonConvert.SerializeObject(new AttendanceRequest
-            {
-                EmployeeId = employee.Id,
-                Date = attendance?.Date.AddDays(1),
-            }), MediaTypeHeaderValue.Parse("application/json"));
+            (
+                employee.Id,
+                attendance?.Date.AddDays(1),
+                null,
+                null,
+                null
+            )), MediaTypeHeaderValue.Parse("application/json"));
         
         // Act
         var response = await _fixture.ApiClient.PutAsync(string.Format(TestConfiguration.Attendance.Update, attendance?.Id), httpContent);

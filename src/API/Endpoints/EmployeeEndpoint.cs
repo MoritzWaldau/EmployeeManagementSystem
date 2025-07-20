@@ -1,8 +1,8 @@
 ﻿namespace API.Endpoints;
 
-public sealed class EmployeeEndpoint : ICarterModule
+public static class EmployeeEndpoint 
 {
-    public void AddRoutes(IEndpointRouteBuilder app)
+    public static void MapEmployeeEndpoints(this IEndpointRouteBuilder app)
     {
         var group = app.MapGroup("api/employee");
         
@@ -12,7 +12,7 @@ public sealed class EmployeeEndpoint : ICarterModule
             .Produces<PaginationResponse<EmployeeResponse>>()
             .Produces(StatusCodes.Status400BadRequest);
         
-        group.MapGet("/{id}", GetEmployeeById)
+        group.MapGet("/{id:guid}", GetEmployeeById)
             .WithSummary("Get employee by id")
             .WithName(nameof(GetEmployeeById))
             .Produces<EmployeeResponse>()
@@ -25,14 +25,14 @@ public sealed class EmployeeEndpoint : ICarterModule
             .Produces<EmployeeResponse>(StatusCodes.Status201Created)
             .Produces(StatusCodes.Status400BadRequest);
         
-        group.MapPut("/{id}", UpdateEmployee)
+        group.MapPut("/{id:guid}", UpdateEmployee)
             .WithSummary("Update employee")
             .WithName(nameof(UpdateEmployee))
             .Accepts<EmployeeRequest>("application/json")
             .Produces<EmployeeResponse>()
             .Produces(StatusCodes.Status400BadRequest);
         
-        group.MapDelete("/{id}", DeleteEmployee)
+        group.MapDelete("/{id:guid}", DeleteEmployee)
             .WithSummary("Delete employee")
             .WithName(nameof(DeleteEmployee))
             .Produces(StatusCodes.Status204NoContent)

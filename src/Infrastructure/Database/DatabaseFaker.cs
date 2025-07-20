@@ -87,16 +87,4 @@ public class DatabaseFaker
             _ => throw new InvalidOperationException($"No faker defined for type {typeof(T).Name}")
         };
     }
-    
-    public static Faker<T> GetFaker<T>() where T : Entity
-    {
-        return typeof(T).Name switch
-        {
-            nameof(Employee) => (Faker<T>)(object)Instance._employeeFaker,
-            nameof(Payroll) => (Faker<T>)(object)Instance._payrollFaker,
-            nameof(Attendance) => (Faker<T>)(object)Instance._attendanceFaker,
-            _ => throw new InvalidOperationException($"No faker defined for type {typeof(T).Name}")
-        };
-    }
-
 }

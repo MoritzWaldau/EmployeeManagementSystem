@@ -29,12 +29,12 @@ public class EmployeeTests(AspireAppFixture fixture) : BaseTests(fixture)
         // Arrange
         var httpContent = new StringContent(
         JsonConvert.SerializeObject(new EmployeeRequest
-        {
-            FirstName = "Moritz",
-            LastName = "Waldau",
-            Email = "m.waldau@reply.de",
-            IsActive = true,
-        }), MediaTypeHeaderValue.Parse("application/json"));
+        (
+            "Moritz",
+            "Waldau",
+            "m.waldau@reply.de",
+             true
+        )), MediaTypeHeaderValue.Parse("application/json"));
         
         // Act
         var response = await _fixture.ApiClient.PostAsync(TestConfiguration.Employee.Create, httpContent);
@@ -64,12 +64,12 @@ public class EmployeeTests(AspireAppFixture fixture) : BaseTests(fixture)
         
         var httpContent = new StringContent(
         JsonConvert.SerializeObject(new EmployeeRequest
-        {
-            FirstName = "Updated " + employee.FirstName ,
-            LastName = "Updated " + employee.LastName,
-            Email = "Updated " + employee.Email,
-            IsActive = false,
-        }), MediaTypeHeaderValue.Parse("application/json"));
+        (
+            "Updated " + employee.FirstName ,
+            "Updated " + employee.LastName,
+            "Updated " + employee.Email,
+             false
+        )), MediaTypeHeaderValue.Parse("application/json"));
         
         // Act
         var response = await _fixture.ApiClient.PutAsync(string.Format(TestConfiguration.Employee.Update, employee.Id), httpContent);

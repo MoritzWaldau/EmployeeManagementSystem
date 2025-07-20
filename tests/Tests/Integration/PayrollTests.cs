@@ -29,13 +29,13 @@ public class PayrollTests(AspireAppFixture fixture) : BaseTests(fixture)
         var employee = await CreateEmployeeWithData();
         var httpContent = new StringContent(
             JsonConvert.SerializeObject(new PayrollRequest
-            {
-                EmployeeId = employee.Id,
-                Year = DateTime.Now.Year,
-                Month = Month.August,
-                GrossSalary = 5000,
-                NetSalary = 4500
-            }), MediaTypeHeaderValue.Parse("application/json"));
+            (
+                employee.Id,
+                2025,
+                Month.August,
+                9000,
+                5678
+            )), MediaTypeHeaderValue.Parse("application/json"));
         
         // Act
         var response = await _fixture.ApiClient.PostAsync(TestConfiguration.Payroll.Create, httpContent);
@@ -67,13 +67,13 @@ public class PayrollTests(AspireAppFixture fixture) : BaseTests(fixture)
         
         var httpContent = new StringContent(
             JsonConvert.SerializeObject(new PayrollRequest
-            {
-                EmployeeId = employee.Id,
-                Year = payroll?.Year + 1,
-                Month = payroll?.Month != Month.January ? Month.January : Month.December,
-                GrossSalary = payroll?.GrossSalary == 0 ? 1000 : payroll?.GrossSalary + 1000,
-                NetSalary = payroll?.NetSalary == 0 ? 1000 : payroll?.NetSalary + 1000
-            }), MediaTypeHeaderValue.Parse("application/json"));
+            (
+                employee.Id,
+                2026,
+                Month.September,
+                20000,
+                10000
+            )), MediaTypeHeaderValue.Parse("application/json"));
         
         // Act
         var response = await _fixture.ApiClient.PutAsync(string.Format(TestConfiguration.Payroll.Update, payroll?.Id), httpContent);
@@ -83,10 +83,10 @@ public class PayrollTests(AspireAppFixture fixture) : BaseTests(fixture)
         // Assert
         Assert.Equal(HttpStatusCode.OK, response.StatusCode);
         Assert.NotNull(updatedPayroll);
-        Assert.Equal(payroll?.Year + 1, updatedPayroll.Year);
-        Assert.Equal(payroll?.Month != Month.January ? Month.January : Month.December, updatedPayroll.Month);
-        Assert.Equal(payroll?.GrossSalary == 0 ? 1000 : payroll?.GrossSalary + 1000, updatedPayroll.GrossSalary);   
-        Assert.Equal(payroll?.NetSalary == 0 ? 1000 : payroll?.NetSalary + 1000, updatedPayroll.NetSalary);
+        Assert.Equal(2026, updatedPayroll.Year);
+        Assert.Equal(Month.September, updatedPayroll.Month);
+        Assert.Equal(20000, updatedPayroll.GrossSalary);   
+        Assert.Equal(10000, updatedPayroll.NetSalary);
     }
     
     [Fact]

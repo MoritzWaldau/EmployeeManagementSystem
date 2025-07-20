@@ -6,12 +6,12 @@ public abstract class BaseTests(AspireAppFixture fixture)
     {
         var httpContent = new StringContent(
         JsonConvert.SerializeObject(new EmployeeRequest
-        {
-            FirstName = "Moritz",
-            LastName = "Waldau",
-            Email = $"{Guid.CreateVersion7()}@reply.de",
-            IsActive = true,
-        }), MediaTypeHeaderValue.Parse("application/json"));
+        (
+            "Moritz",
+            "Waldau",
+            $"{Guid.CreateVersion7()}@reply.de",
+            true
+        )), MediaTypeHeaderValue.Parse("application/json"));
 
         var res = await fixture.ApiClient.PostAsync(TestConfiguration.Employee.Create, httpContent);
 
@@ -19,13 +19,14 @@ public abstract class BaseTests(AspireAppFixture fixture)
         var employee = JsonConvert.DeserializeObject<EmployeeResponse>(jsonString);
 
         var attendanceRequest = new AttendanceRequest
-        {
-            EmployeeId = employee?.Id ?? throw new InvalidOperationException("Failed to create employee."),
-            Date = new DateOnly(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day),
-            CheckInTime = new TimeSpan(8, 0, 0), // 08:00 AM
-            CheckOutTime = new TimeSpan(16, 0, 0), // 04:00 PM
-            Status = Status.WorkTime
-        };
+        (
+            employee?.Id ?? throw new InvalidOperationException("Failed to create employee."),
+            new DateOnly(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day),
+            new TimeSpan(8, 0, 0), // 08:00 AM
+            new TimeSpan(16, 0, 0), // 04:00 PM
+            Status.WorkTime
+                
+        );
 
         var attendanceContent = new StringContent(
             JsonConvert.SerializeObject(attendanceRequest), MediaTypeHeaderValue.Parse("application/json"));
@@ -36,13 +37,14 @@ public abstract class BaseTests(AspireAppFixture fixture)
         var attendance = JsonConvert.DeserializeObject<AttendanceResponse>(jsonString) ?? throw new InvalidOperationException("Failed to deserialize attendance.");
 
         var payrollRequest = new PayrollRequest
-        {
-            EmployeeId = employee.Id,
-            Month = Month.August,
-            Year = DateTime.Now.Year,
-            GrossSalary = 5000,
-            NetSalary = 3000,
-        };
+            (
+                employee?.Id,
+                2025,
+                Month.August,
+                9000,
+                5678
+            );
+        
 
         var payrollContent = new StringContent(
             JsonConvert.SerializeObject(payrollRequest), MediaTypeHeaderValue.Parse("application/json"));
@@ -54,14 +56,16 @@ public abstract class BaseTests(AspireAppFixture fixture)
 
 
         return new EmployeeResponse
-        {
-            Id = employee.Id,
-            FirstName = employee.FirstName,
-            LastName = employee.LastName,
-            Email = employee.Email,
-            IsActive = employee.IsActive,
-            Attendances = new List<AttendanceResponse> { attendance },
-            Payrolls = new List<PayrollResponse> { payroll }
-        };
+        (
+            employee!.Id,
+            employee.CreatedAt,
+            employee.ModifiedAt,
+            employee.IsActive,
+            employee.FirstName,
+            employee.LastName,
+            employee.Email,
+            new List<PayrollResponse> { payroll },
+            new List<AttendanceResponse> { attendance }
+        );
     }
 }

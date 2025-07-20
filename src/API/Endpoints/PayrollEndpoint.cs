@@ -2,9 +2,9 @@
 
 namespace API.Endpoints;
 
-public sealed class PayrollEndpoint : ICarterModule
+public static class PayrollEndpoint 
 {
-    public void AddRoutes(IEndpointRouteBuilder app)
+    public static void MapPayrollEndpoints(this IEndpointRouteBuilder app)
     {
         var group = app.MapGroup("api/payroll");
         
@@ -27,14 +27,14 @@ public sealed class PayrollEndpoint : ICarterModule
             .Produces<PayrollResponse>(StatusCodes.Status201Created)
             .Produces(StatusCodes.Status400BadRequest);
         
-        group.MapPut("/{id}", UpdatePayroll)
+        group.MapPut("/{id:guid}", UpdatePayroll)
             .WithSummary("Update payroll")
             .WithName(nameof(UpdatePayroll))
             .Accepts<PayrollRequest>("application/json")
             .Produces<PayrollResponse>()
             .Produces(StatusCodes.Status400BadRequest);
         
-        group.MapDelete("/{id}", DeletePayroll)
+        group.MapDelete("/{id:guid}", DeletePayroll)
             .WithSummary("Delete payroll")
             .WithName(nameof(DeletePayroll))
             .Produces(StatusCodes.Status204NoContent);
