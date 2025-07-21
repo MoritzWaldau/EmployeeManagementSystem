@@ -3,7 +3,7 @@ global using Domain.Pattern;
 global using Bogus;
 global using Domain.Abstraction;
 global using Domain.Entities;
-global using Domain.Enums;
+global using Shared.Enums;
 global using Infrastructure.Database;
 global using Infrastructure.Repositories;
 global using Microsoft.EntityFrameworkCore;

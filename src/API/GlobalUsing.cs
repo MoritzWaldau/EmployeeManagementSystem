@@ -2,10 +2,10 @@
 global using API.Middleware;
 global using Application;
 global using Application.Abstraction.Service;
-global using Application.Models.Attendance;
-global using Application.Models.Employee;
-global using Application.Models.Pagination;
-global using Application.Models.Payroll;
+global using Shared.Models.Attendance;
+global using Shared.Models.Employee;
+global using Shared.Models.Pagination;
+global using Shared.Models.Payroll;
 global using Infrastructure;
 global using Microsoft.AspNetCore.Diagnostics;
 global using Microsoft.AspNetCore.Mvc;

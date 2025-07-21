@@ -1,0 +1,13 @@
+@page "/employees"
+@using MudBlazor
+@attribute [StreamRendering]
+
+<MudDataGrid Items="@_employees" Loading="@_isLoading">
+    <Columns>
+        <PropertyColumn Property="x => x.Id"/>
+        <PropertyColumn Property="x => x.FirstName" />
+        <PropertyColumn Property="x => x.LastName" />
+        <PropertyColumn Property="x => x.Email" />
+        <PropertyColumn Property="x => x.IsActive" Title="Active" />
+    </Columns>
+</MudDataGrid>
