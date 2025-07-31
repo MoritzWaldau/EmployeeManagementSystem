@@ -30,6 +30,7 @@ public sealed class AttendanceService(
                     paginationRequest.PageSize,
                     paginationRequest.PageIndex < totalPages,
                     paginationRequest.PageIndex > 1,
+                    totalPages,
                     mappedAttendances
                 );
             },

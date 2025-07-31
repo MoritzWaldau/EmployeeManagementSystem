@@ -1,7 +1,8 @@
-﻿@using MudBlazor
+﻿@using BlazorApp.Configuration
+@using MudBlazor
 @inherits LayoutComponentBase
 
-<MudThemeProvider/>
+<MudThemeProvider Theme="ThemeConfiguration.ApplicationTheme()" IsDarkMode="false"/>
 <MudPopoverProvider />
 <MudDialogProvider     
     Position="DialogPosition.Center"
@@ -10,20 +11,10 @@
 <MudSnackbarProvider />
 
 <MudLayout>
-    <MudAppBar Fixed="true" Elevation="10">
-        <MudGrid>
-            <MudItem xs="3" Class="d-flex justify-start">
-                <MudText Class="cursor-pointer m-2" Typo="Typo.h5">Employee Management System</MudText>
-            </MudItem>
-            <MudItem xs="6" Class="d-flex justify-center">
-                <MudText Class="m-3 cursor-pointer" Typo="Typo.body2" @onclick="@(_ => NavigateTo("employees"))"><MudIcon Size="Size.Small" Icon="@Icons.Material.Filled.People"/>Employees</MudText>
-                <MudText Class="m-3 cursor-pointer" Typo="Typo.body2" @onclick="@(_ => NavigateTo("attendances"))"><MudIcon Size="Size.Small" Icon="@Icons.Material.Filled.Today"/>Calendar</MudText>
-                <MudText Class="m-3 cursor-pointer" Typo="Typo.body2" @onclick="@(_ => NavigateTo("payrolls"))"><MudIcon Size="Size.Small" Icon="@Icons.Material.Filled.AccountBalance"/>Payrolls</MudText>
-            </MudItem>
-            <MudItem xs="3" Class="d-flex justify-end"/>
-        </MudGrid>
-    </MudAppBar>
-    <MudMainContent>
+    <AppBar></AppBar>
+    <NavBar></NavBar>
+    
+    <MudMainContent Style="padding-top:1.5rem !important">
         <MudContainer MaxWidth="MaxWidth.ExtraExtraLarge" Class="mt-10">
             @Body
         </MudContainer>

@@ -13,4 +13,18 @@ public sealed record EmployeeResponse(
     string Email,
     IEnumerable<PayrollResponse>? Payrolls,
     IEnumerable<AttendanceResponse>? Attendances
-) : BaseResponse(Id, CreatedAt, ModifiedAt, IsActive);
+) : BaseResponse(Id, CreatedAt, ModifiedAt, IsActive)
+{
+    public void Deconstruct(
+        out string firstName,
+        out string lastName,
+        out string email,
+        out bool isActive)
+    {
+        isActive = IsActive;
+        firstName = FirstName;
+        lastName = LastName;
+        email = Email;
+        
+    }
+}

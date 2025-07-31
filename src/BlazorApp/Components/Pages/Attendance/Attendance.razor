@@ -1,0 +1,45 @@
+@page "/attendances"
+@attribute [StreamRendering]
+
+<MudSimpleTable FixedHeader="true">
+    <thead>
+        <tr>
+            <th>Id</th>
+            <th>Date</th>
+            <th>CheckInTime</th>
+            <th>CheckOutTime</th>
+            <th>WorkDuration</th>
+            <th>Status</th>
+            <th>Info</th>
+            <th>Action</th>
+        </tr>
+    </thead>
+    <tbody>
+    @foreach (var attendance in _attendances)
+    {
+        <tr>
+            <td>@attendance.Id</td>
+            <td>@attendance.Date.ToShortDateString()</td>
+            <td>@attendance.CheckInTime</td>
+            <td>@attendance.CheckOutTime</td>
+            <td>@attendance.WorkDuration</td>
+            <td>@attendance.Status</td>
+            <td><MudIconButton Icon="@Icons.Material.Filled.ArrowRightAlt" aria-label="goto" Class="pa-0" /></td>
+            <td><MudIconButton Icon="@Icons.Material.Filled.Delete" aria-label="goto" Class="pa-0" OnClick="@(() => DeleteAttendanceAsync(attendance.Id))"/></td>
+        </tr>
+    }
+    </tbody>
+</MudSimpleTable>
+
+<MudContainer Class="d-flex justify-center flex-grow-1 gap-4 py-3">
+    <MudPagination SelectedChanged="OnPageChanged" Count="_totalPages"></MudPagination>
+    <MudMenu Label="@_currentPageSize.ToString()" EndIcon="@Icons.Material.Filled.KeyboardArrowDown" >
+        <MudMenuItem Label="10" OnClick="@(async ()=> await OnPageSizeChanged(10))" />
+        <MudMenuItem Label="25" OnClick="@(async ()=> await OnPageSizeChanged(25))" />
+        <MudMenuItem Label="50" OnClick="@(async ()=> await OnPageSizeChanged(50))" />
+        <MudMenuItem Label="100" OnClick="@(async ()=> await OnPageSizeChanged(100))" />
+    </MudMenu>
+</MudContainer>
+
+
+

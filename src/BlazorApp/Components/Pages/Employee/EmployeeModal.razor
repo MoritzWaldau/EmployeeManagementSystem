@@ -1,0 +1,30 @@
+
+
+
+<MudDialog>
+    <TitleContent>
+        <MudText Typo="Typo.h6">Employee Details</MudText>
+    </TitleContent>
+    <DialogContent>
+        <MudContainer MaxWidth="MaxWidth.Large">
+            <MudGrid>
+                <MudItem sm="12" md="6">
+                    <MudTextField @bind-Value="@_firstName" Label="Firstname" Variant="Variant.Text"></MudTextField>
+                </MudItem>
+                <MudItem sm="12" md="6">
+                    <MudTextField @bind-Value="@_lastName" Label="Lastname" Variant="Variant.Text"></MudTextField>
+                </MudItem>
+                <MudItem sm="12">
+                    <MudTextField @bind-Value="@_email" Label="Email" Variant="Variant.Text"></MudTextField>
+                </MudItem>
+                <MudItem sm="12" md="6">
+                    <MudSwitch @bind-Value="_isActive" Label="Active" Color="Color.Success"/>
+                </MudItem>
+            </MudGrid>
+        </MudContainer>
+    </DialogContent>
+    <DialogActions>
+        <MudButton OnClick="Cancel">Cancel</MudButton>
+        <MudButton Color="Color.Primary" OnClick="Submit">OK</MudButton>
+    </DialogActions>
+</MudDialog>

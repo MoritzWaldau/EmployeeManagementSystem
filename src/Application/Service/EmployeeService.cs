@@ -30,6 +30,7 @@ public sealed class EmployeeService(
                     paginationRequest.PageSize,
                     paginationRequest.PageIndex < totalPages,
                     paginationRequest.PageIndex > 1,
+                    totalPages,
                     mappedEmployees
                 );
             },

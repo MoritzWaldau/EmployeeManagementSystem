@@ -4,6 +4,7 @@ public sealed record PaginationResponse<TEntity>(
     int PageIndex, 
     int PageSize, 
     bool HasNextPage, 
-    bool HasPreviousPage, 
+    bool HasPreviousPage,
+    int PageCount,
     IEnumerable<TEntity> Items
 ) where TEntity : BaseResponse;
