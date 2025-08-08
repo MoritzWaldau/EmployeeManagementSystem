@@ -55,7 +55,6 @@ public partial class Employee : ComponentBase
         if (result is { Canceled: false })
         {
             var employeeRequest = (EmployeeRequest)result.Data!;
-            SnackbarService.Add($"{employeeRequest.FirstName}, {employeeRequest.LastName}, {employeeRequest.Email}, {employeeRequest.IsActive}", Severity.Success);
 
             if (employee is not null)
             {

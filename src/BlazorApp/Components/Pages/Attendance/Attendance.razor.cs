@@ -40,8 +40,43 @@ public partial class Attendance : ComponentBase
     
     private async Task DeleteAttendanceAsync(Guid id)
     {
-        await Api.DeleteEmployee(id);
+        await Api.DeleteAttendance(id);
         SnackbarService.Add("Attendance deleted", Severity.Success);
         await LoadAttendancesAsync(_currentPage, _currentPageSize);
+    }
+
+    private async Task OnRowClickEventHandler(TableRowClickEventArgs<AttendanceResponse> args)
+    {
+        if (args.Item is not null)
+        {
+            await ShowAttendanceModalAsync(args.Item);
+        }
+    }
+    
+    private async Task ShowAttendanceModalAsync(AttendanceResponse? attendance)
+    {
+        var parameters = new DialogParameters<AttendanceModal> { { x => x.Attendance, attendance }, { x => x.EmployeeId, Guid.Empty } };
+        var options = new DialogOptions { CloseButton = true, MaxWidth = MaxWidth.ExtraSmall };
+        
+        var dialog = await DialogService.ShowAsync<AttendanceModal>(attendance is not null ? "Edit attendance" : "Create attendance", parameters, options);
+        var result = await dialog.Result;
+
+        if (result is { Canceled: false })
+        {
+            var attendanceRequest = (AttendanceRequest)result.Data!;
+
+            if (attendance is not null)
+            {
+                await Api.UpdateAttendance(attendance.Id, attendanceRequest);
+                SnackbarService.Add("Attendance updated", Severity.Success);
+            }
+            else
+            {
+                await Api.CreateAttendance(attendanceRequest);
+                SnackbarService.Add("Attendance created", Severity.Success);
+            }
+
+            await LoadAttendancesAsync(_currentPage, _currentPageSize);
+        }
     }
 }

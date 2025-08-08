@@ -1,35 +1,26 @@
 @page "/attendances"
+@using Shared.Models.Attendance
 @attribute [StreamRendering]
 
-<MudSimpleTable FixedHeader="true">
-    <thead>
-        <tr>
-            <th>Id</th>
-            <th>Date</th>
-            <th>CheckInTime</th>
-            <th>CheckOutTime</th>
-            <th>WorkDuration</th>
-            <th>Status</th>
-            <th>Info</th>
-            <th>Action</th>
-        </tr>
-    </thead>
-    <tbody>
-    @foreach (var attendance in _attendances)
-    {
-        <tr>
-            <td>@attendance.Id</td>
-            <td>@attendance.Date.ToShortDateString()</td>
-            <td>@attendance.CheckInTime</td>
-            <td>@attendance.CheckOutTime</td>
-            <td>@attendance.WorkDuration</td>
-            <td>@attendance.Status</td>
-            <td><MudIconButton Icon="@Icons.Material.Filled.ArrowRightAlt" aria-label="goto" Class="pa-0" /></td>
-            <td><MudIconButton Icon="@Icons.Material.Filled.Delete" aria-label="goto" Class="pa-0" OnClick="@(() => DeleteAttendanceAsync(attendance.Id))"/></td>
-        </tr>
-    }
-    </tbody>
-</MudSimpleTable>
+<MudTable Items="_attendances" T="AttendanceResponse" Elevation="0" OnRowClick="@(async (x) => await OnRowClickEventHandler(x))">
+    <HeaderContent>
+        <MudTh><MudTableSortLabel SortBy="@AttendanceFunction.SortById">Id</MudTableSortLabel></MudTh>
+        <MudTh><MudTableSortLabel SortBy="@AttendanceFunction.SortByDate">Date</MudTableSortLabel></MudTh>
+        <MudTh><MudTableSortLabel SortBy="@AttendanceFunction.SortByCheckInTime">Check in time</MudTableSortLabel></MudTh>
+        <MudTh><MudTableSortLabel SortBy="@AttendanceFunction.SortByCheckOutTime">Check out time</MudTableSortLabel></MudTh>
+        <MudTh><MudTableSortLabel SortBy="@AttendanceFunction.SortByCheckWorkDuration">Work duration</MudTableSortLabel></MudTh>
+        <MudTh><MudTableSortLabel SortBy="@AttendanceFunction.SortByStatus">Status</MudTableSortLabel></MudTh>
+    </HeaderContent>
+    <RowTemplate>
+        <MudTd DataLabel="Id">@context.Id</MudTd>
+        <MudTd DataLabel="Date">@context.Date</MudTd>
+        <MudTd DataLabel="CheckInTime">@context.CheckInTime.ToString()</MudTd>
+        <MudTd DataLabel="CheckOutTime">@context.CheckOutTime.ToString()</MudTd>
+        <MudTd DataLabel="WorkDuration">@context.WorkDuration.ToString()</MudTd>
+        <MudTd DataLabel="Status">@context.Status.ToString()</MudTd>
+        <MudTd Style="text-align: center" DataLabel="Action"><MudIconButton Icon="@Icons.Material.Filled.Delete" aria-label="goto" Class="pa-0" OnClick="@(() => DeleteAttendanceAsync(context.Id))"/></MudTd>
+    </RowTemplate>
+</MudTable>
 
 <MudContainer Class="d-flex justify-center flex-grow-1 gap-4 py-3">
     <MudPagination SelectedChanged="OnPageChanged" Count="_totalPages"></MudPagination>
