@@ -15,10 +15,12 @@
         <PackageReference Include="Aspire.Hosting.AppHost" Version="9.3.1" />
         <PackageReference Include="Aspire.Hosting.PostgreSQL" Version="9.3.1" />
         <PackageReference Include="Aspire.Hosting.Redis" Version="9.3.1" />
+        <PackageReference Include="Aspire4Wasm.AppHost" Version="6.0.0" />
     </ItemGroup>
 
     <ItemGroup>
       <ProjectReference Include="..\API\API.csproj" />
+      <ProjectReference Include="..\BlazorApp\BlazorApp.csproj" />
     </ItemGroup>
 
 </Project>

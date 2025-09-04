@@ -2,11 +2,11 @@ global using AutoMapper;
 global using API.Endpoints;
 global using Application.Abstraction.Repository;
 global using Application.Mapping;
-global using Application.Models.Attendance;
-global using Application.Models.Employee;
-global using Application.Models.Payroll;
+global using Shared.Models.Attendance;
+global using Shared.Models.Employee;
+global using Shared.Models.Payroll;
 global using Domain.Entities;
-global using Domain.Enums;
+global using Shared.Enums;
 global using Infrastructure.Database;
 global using Infrastructure.Repositories;
 global using NetArchTest.Rules;
@@ -17,7 +17,7 @@ global using System.Reflection;
 global using Tests.Configuration;
 global using Aspire.Hosting;
 global using Microsoft.Extensions.Logging;
-global using Application.Models.Pagination;
+global using Shared.Models.Pagination;
 
 
 

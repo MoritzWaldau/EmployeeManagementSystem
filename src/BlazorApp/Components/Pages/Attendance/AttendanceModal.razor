@@ -1,0 +1,33 @@
+@using Shared.Enums
+<MudDialog>
+    <TitleContent>
+        <MudText Typo="Typo.h6">Attendance details</MudText>
+    </TitleContent>
+    <DialogContent>
+        <MudContainer MaxWidth="MaxWidth.Large">
+            <MudGrid>
+                <MudItem sm="12" md="6">
+                    <MudDatePicker Label="Basic example" @bind-Date="_date"/>
+                </MudItem>
+                <MudItem sm="12" md="6">
+                    <MudSelect T="Status" @bind-Value="_status">
+                        @foreach(var status in Enum.GetValues(typeof(Status)).Cast<Status>())
+                        {
+                            <MudSelectItem Value="@status">@status.ToString()</MudSelectItem>
+                        }
+                    </MudSelect>
+                </MudItem>
+                <MudItem sm="12" md="6">
+                    <MudTimePicker Label="12 hours" AmPm="true" @bind-Time="_checkInTime" />
+                </MudItem>
+                <MudItem sm="12" md="6">
+                    <MudTimePicker Label="12 hours" AmPm="true" @bind-Time="_checkOutTime" />
+                </MudItem>
+            </MudGrid>
+        </MudContainer>
+    </DialogContent>
+    <DialogActions>
+        <MudButton OnClick="Cancel">Cancel</MudButton>
+        <MudButton Color="Color.Primary" OnClick="Submit">OK</MudButton>
+    </DialogActions>
+</MudDialog>

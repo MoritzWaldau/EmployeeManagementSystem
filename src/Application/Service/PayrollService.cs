@@ -32,6 +32,7 @@ public sealed class PayrollService(
                     paginationRequest.PageSize,
                     paginationRequest.PageIndex < totalPages,
                     paginationRequest.PageIndex > 1,
+                    totalPages,
                     mappedPayrolls
                 );
             },

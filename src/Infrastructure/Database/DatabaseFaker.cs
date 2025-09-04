@@ -1,4 +1,7 @@
-﻿namespace Infrastructure.Database;
+﻿using OpenTelemetry.Trace;
+using Status = Shared.Enums.Status;
+
+namespace Infrastructure.Database;
 
 public class DatabaseFaker 
 {
