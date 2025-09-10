@@ -10,6 +10,12 @@ var api = builder.AddProject<Projects.API>("api")
     .WaitFor(postgres)
     .WaitFor(redis);
 
+builder.AddProject<Projects.GraphQL>("graphql")
+    .WithReference(postgres)
+    .WithReference(redis)
+    .WaitFor(postgres)
+    .WaitFor(redis);
+
 builder.AddProject<Projects.BlazorApp>("web")
     .WithExternalHttpEndpoints()
     .WithReference(api)
