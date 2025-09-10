@@ -1,0 +1,10 @@
+﻿global using Application;
+global using Application.Abstraction.Service;
+global using Infrastructure;
+global using Infrastructure.Database;
+global using Microsoft.EntityFrameworkCore;
+global using Serilog;
+global using Shared.Models.Attendance;
+global using Shared.Models.Employee;
+global using Shared.Models.Pagination;
+global using Shared.Models.Payroll;

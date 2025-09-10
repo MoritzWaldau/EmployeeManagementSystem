@@ -1,6 +1,6 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
-    <Sdk Name="Aspire.AppHost.Sdk" Version="9.0.0"/>
+    <Sdk Name="Aspire.AppHost.Sdk" Version="9.0.0" />
 
     <PropertyGroup>
         <OutputType>Exe</OutputType>
@@ -21,6 +21,7 @@
     <ItemGroup>
       <ProjectReference Include="..\API\API.csproj" />
       <ProjectReference Include="..\BlazorApp\BlazorApp.csproj" />
+      <ProjectReference Include="..\GraphQL\GraphQL.csproj" />
     </ItemGroup>
 
 </Project>
