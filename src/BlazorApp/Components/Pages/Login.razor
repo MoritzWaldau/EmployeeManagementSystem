@@ -1,0 +1,34 @@
+@page "/login"
+@using Microsoft.AspNetCore.Components
+@inject NavigationManager Navigation
+
+<PageTitle>Login</PageTitle>
+
+<div class="login-container">
+    <MudPaper Class="pa-8" Elevation="3">
+        <MudText Typo="Typo.h4" Align="Align.Center" GutterBottom="true">
+            Willkommen
+        </MudText>
+        <MudText Typo="Typo.body1" Align="Align.Center" Class="mb-4">
+            Bitte melden Sie sich an, um fortzufahren
+        </MudText>
+        <MudButton Variant="Variant.Filled" 
+                   Color="Color.Primary" 
+                   FullWidth="true"
+                   Href="/Account/Login?returnUrl=/">
+            Mit OpenID Connect anmelden
+        </MudButton>
+    </MudPaper>
+</div>
+
+<style>
+    .login-container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 60vh;
+        max-width: 400px;
+        margin: 0 auto;
+    }
+</style>
+

@@ -1,0 +1,56 @@
+@page "/accessdenied"
+@using Microsoft.AspNetCore.Components.Authorization
+
+<PageTitle>Zugriff verweigert</PageTitle>
+
+<div class="access-denied-container">
+    <MudPaper Class="pa-8" Elevation="3">
+        <MudText Typo="Typo.h4" Align="Align.Center" GutterBottom="true" Color="Color.Error">
+            Zugriff verweigert
+        </MudText>
+        <MudText Typo="Typo.body1" Align="Align.Center" Class="mb-4">
+            Sie haben keine Berechtigung, auf diese Seite zuzugreifen.
+        </MudText>
+        <MudButton Variant="Variant.Filled" 
+                   Color="Color.Primary" 
+                   FullWidth="true"
+                   Href="/">
+            Zurück zur Startseite
+        </MudButton>
+    </MudPaper>
+</div>
+
+<style>
+    .access-denied-container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 60vh;
+        max-width: 400px;
+        margin: 0 auto;
+    }
+</style>
+<AuthorizeView>
+    <Authorized>
+        <div class="user-info">
+            <MudText Typo="Typo.body2">
+                Angemeldet als: @context.User.Identity?.Name
+            </MudText>
+            <MudButton Variant="Variant.Text" 
+                       Color="Color.Primary" 
+                       Href="/logout"
+                       Size="Size.Small">
+                Abmelden
+            </MudButton>
+        </div>
+    </Authorized>
+    <NotAuthorized>
+        <MudButton Variant="Variant.Filled" 
+                   Color="Color.Primary" 
+                   Href="/login"
+                   Size="Size.Small">
+            Anmelden
+        </MudButton>
+    </NotAuthorized>
+</AuthorizeView>
+

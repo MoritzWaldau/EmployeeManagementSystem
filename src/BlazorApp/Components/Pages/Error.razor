@@ -1,0 +1,32 @@
+@page "/error"
+
+<PageTitle>Fehler</PageTitle>
+
+<div class="error-container">
+    <MudPaper Class="pa-8" Elevation="3">
+        <MudText Typo="Typo.h4" Align="Align.Center" GutterBottom="true" Color="Color.Error">
+            Authentifizierungsfehler
+        </MudText>
+        <MudText Typo="Typo.body1" Align="Align.Center" Class="mb-4">
+            Bei der Anmeldung ist ein Fehler aufgetreten. Bitte versuchen Sie es erneut.
+        </MudText>
+        <MudButton Variant="Variant.Filled" 
+                   Color="Color.Primary" 
+                   FullWidth="true"
+                   Href="/login">
+            Zurück zum Login
+        </MudButton>
+    </MudPaper>
+</div>
+
+<style>
+    .error-container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 60vh;
+        max-width: 400px;
+        margin: 0 auto;
+    }
+</style>
+

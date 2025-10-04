@@ -1,0 +1,32 @@
+@page "/logout"
+
+<PageTitle>Logout</PageTitle>
+
+<div class="logout-container">
+    <MudPaper Class="pa-8" Elevation="3">
+        <MudText Typo="Typo.h4" Align="Align.Center" GutterBottom="true">
+            Abmelden
+        </MudText>
+        <MudText Typo="Typo.body1" Align="Align.Center" Class="mb-4">
+            Möchten Sie sich wirklich abmelden?
+        </MudText>
+        <MudButton Variant="Variant.Filled" 
+                   Color="Color.Primary" 
+                   FullWidth="true"
+                   Href="/logout-redirect">
+            Abmelden
+        </MudButton>
+    </MudPaper>
+</div>
+
+<style>
+    .logout-container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 60vh;
+        max-width: 400px;
+        margin: 0 auto;
+    }
+</style>
+
