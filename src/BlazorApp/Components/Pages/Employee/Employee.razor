@@ -3,7 +3,7 @@
 @attribute [StreamRendering]
 
 
-<MudTable Items="_employees" T="EmployeeResponse" Elevation="0" On OnRowClick="@(async (x)=> await OnRowClickEventHandler(x))">
+<MudTable Items="_employees" T="EmployeeResponse" Elevation="0" OnRowClick="@(async (x)=> await OnRowClickEventHandler(x))">
     <HeaderContent>
         <MudTh><MudTableSortLabel SortBy="@EmployeeFunction.SortById">Id</MudTableSortLabel></MudTh>
         <MudTh><MudTableSortLabel SortBy="@EmployeeFunction.SortByFirstname">Firstname</MudTableSortLabel></MudTh>

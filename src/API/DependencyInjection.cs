@@ -82,8 +82,16 @@ public static class DependencyInjection
 
     private static void MapDatabase(this WebApplication app)
     {
-        using var scope = app.Services.CreateScope();
-        var dbContext = scope.ServiceProvider.GetRequiredService<DatabaseContext>();
-        dbContext.Database.Migrate();
+        try
+        {
+            using var scope = app.Services.CreateScope();
+            var dbContext = scope.ServiceProvider.GetRequiredService<DatabaseContext>();
+            dbContext.Database.EnsureCreated();
+        }
+        catch (Exception ex)
+        {
+            var logger = app.Services.GetRequiredService<ILogger<DatabaseContext>>();
+            logger.LogError(ex, "An error occurred creating the DB.");
+        }
     }
 }
