@@ -53,7 +53,7 @@ public static class DependencyInjection
     public static void AddDatabase(this WebApplicationBuilder builder)
     {
         builder.AddNpgsqlDbContext<DatabaseContext>(
-            "postgres", 
+            "employeedb", 
             configureDbContextOptions: optionsBuilder => optionsBuilder.UseNpgsql(x => x.UseQuerySplittingBehavior(QuerySplittingBehavior.SplitQuery))
         );
     }
@@ -91,7 +91,7 @@ public static class DependencyInjection
         catch (Exception ex)
         {
             var logger = app.Services.GetRequiredService<ILogger<DatabaseContext>>();
-            logger.LogError(ex, "An error occurred creating the DB.");
+            logger.LogCritical(ex, "An error occurred creating the DB.");
         }
     }
 }

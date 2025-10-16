@@ -21,7 +21,7 @@ public static class DependencyInjection
     public static void AddDatabase(this WebApplicationBuilder builder)
     {
         builder.AddNpgsqlDbContext<DatabaseContext>(
-            "postgres",
+            "employeedb",
             configureDbContextOptions: optionsBuilder => optionsBuilder.UseNpgsql(x => x.UseQuerySplittingBehavior(QuerySplittingBehavior.SplitQuery))
         );
     }
