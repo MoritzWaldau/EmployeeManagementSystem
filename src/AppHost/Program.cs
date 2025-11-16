@@ -1,39 +1,27 @@
 var builder = DistributedApplication.CreateBuilder(args);
 
-var postgres = builder.AddPostgres("postgres", port: 5432);
-var employeeDb = postgres.AddDatabase("employeedb");
-var keycloakDb = postgres.AddDatabase("keycloakdb");
+var postgresServer = builder.AddPostgres("postgres", port: 5432);
+var employeeDb = postgresServer.AddDatabase("employeedb");
 
 var redis = builder.AddRedis("redis");
-
-var keycloak = builder.AddKeycloak("keycloak", 8080)
-    .WithDataVolume()
-    .WithReference(keycloakDb)
-    .WaitFor(keycloakDb);
 
 var api = builder.AddProject<Projects.API>("api")
     .WithReference(employeeDb)
     .WithReference(redis)
-    .WithReference(keycloak)
     .WaitFor(employeeDb)
-    .WaitFor(redis)
-    .WaitFor(keycloak);
+    .WaitFor(redis);
 
 var graphql = builder.AddProject<Projects.GraphQL>("graphql")
     .WithReference(employeeDb)
     .WithReference(redis)
-    .WithReference(keycloak)
     .WaitFor(employeeDb)
-    .WaitFor(redis)
-    .WaitFor(keycloak);
+    .WaitFor(redis);
 
 builder.AddProject<Projects.BlazorApp>("web")
     .WithReference(api)
     .WithReference(graphql)
-    .WithReference(keycloak)
     .WithExternalHttpEndpoints()
     .WaitFor(api)
-    .WaitFor(graphql)
-    .WaitFor(keycloak);
+    .WaitFor(graphql);
 
 builder.Build().Run();

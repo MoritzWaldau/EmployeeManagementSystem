@@ -17,29 +17,29 @@ builder.Services.AddCascadingAuthenticationState();
 
 
 builder.Services.AddAuthentication(options =>
-    {
-        options.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;
-        options.DefaultChallengeScheme = OpenIdConnectDefaults.AuthenticationScheme;
-    })
-    .AddCookie()
-    .AddOpenIdConnect(options =>
-    {
-        options.Authority = builder.Configuration["Keycloak:Authority"] ?? throw new InvalidOperationException("Keycloak:Authority is required.");
-        options.ClientId = builder.Configuration["Keycloak:ClientId"] ?? throw new InvalidOperationException("Keycloak:ClientId is required.");
-        options.ClientSecret = builder.Configuration["Keycloak:ClientSecret"] ?? throw new InvalidOperationException("Keycloak:ClientSecret is required.");
-        
-        options.SignInScheme = CookieAuthenticationDefaults.AuthenticationScheme;
-        options.ResponseType = OpenIdConnectResponseType.Code;
+{
+    options.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+    options.DefaultChallengeScheme = OpenIdConnectDefaults.AuthenticationScheme;
+})
+.AddCookie()
+.AddOpenIdConnect(options =>
+{
+    options.Authority = builder.Configuration["Keycloak:Authority"] ?? throw new InvalidOperationException("Keycloak:Authority is required.");
+    options.ClientId = builder.Configuration["Keycloak:ClientId"] ?? throw new InvalidOperationException("Keycloak:ClientId is required.");
+    options.ClientSecret = builder.Configuration["Keycloak:ClientSecret"] ?? throw new InvalidOperationException("Keycloak:ClientSecret is required.");
+    
+    options.SignInScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+    options.ResponseType = OpenIdConnectResponseType.Code;
 
-        options.SaveTokens = true;
-        options.GetClaimsFromUserInfoEndpoint = true;
+    options.SaveTokens = true;
+    options.GetClaimsFromUserInfoEndpoint = true;
 
-        options.MapInboundClaims = false;
-        options.TokenValidationParameters.NameClaimType = JwtRegisteredClaimNames.Name;
-        options.TokenValidationParameters.RoleClaimType = "roles";
+    options.MapInboundClaims = false;
+    options.TokenValidationParameters.NameClaimType = JwtRegisteredClaimNames.Name;
+    options.TokenValidationParameters.RoleClaimType = "roles";
 
-        options.RequireHttpsMetadata = false;
-    });
+    options.RequireHttpsMetadata = false;
+});
 
 builder.Services.AddAuthorization();
 
